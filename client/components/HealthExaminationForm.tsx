@@ -138,8 +138,8 @@ export default function HealthExaminationForm() {
 
     try {
       // URL Google Apps Script Web App - GANTI DENGAN URL DEPLOYMENT ANDA
-      // Contoh: 'https://script.google.com/macros/s/AKfycby.../exec'
-      const GOOGLE_SCRIPT_URL = 'PASTE_URL_DEPLOYMENT_GOOGLE_APPS_SCRIPT_DI_SINI';
+      // IMPORTANT: Ganti URL di bawah dengan URL deployment Anda!
+      const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/YOUR_DEPLOYMENT_ID/exec';
 
       const response = await fetch(GOOGLE_SCRIPT_URL, {
         method: 'POST',
