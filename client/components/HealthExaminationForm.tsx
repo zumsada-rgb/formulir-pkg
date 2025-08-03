@@ -348,10 +348,12 @@ export default function HealthExaminationForm() {
                   id="nomorHp"
                   name="nomorHp"
                   type="tel"
+                  inputMode="numeric"
                   placeholder="08xxxxxxxxxx"
                   value={formData.nomorHp}
                   onChange={handleInputChange}
                   required
+                  min="0"
                   className="border-gray-200 focus:border-emerald-300 focus:ring-emerald-200"
                 />
               </div>
@@ -401,7 +403,7 @@ export default function HealthExaminationForm() {
         {/* Footer Info */}
         <div className="mt-8 text-center">
           <p className="text-sm text-gray-600">
-            * Semua field wajib diisi • Data Anda akan dijaga kerahasiaannya
+            * Semua field wajib diisi ��� Data Anda akan dijaga kerahasiaannya
           </p>
           <p className="text-xs text-gray-500 mt-2">
             Untuk informasi lebih lanjut, hubungi panitia penyelenggara
