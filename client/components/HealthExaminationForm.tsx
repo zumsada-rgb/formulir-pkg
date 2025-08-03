@@ -238,13 +238,15 @@ export default function HealthExaminationForm() {
                   <Input
                     id="nik"
                     name="nik"
-                    type="text"
+                    type="number"
+                    inputMode="numeric"
                     placeholder="16 digit NIK"
                     value={formData.nik}
                     onChange={handleInputChange}
                     required
                     maxLength={16}
                     pattern="[0-9]{16}"
+                    min="0"
                     className="border-gray-200 focus:border-emerald-300 focus:ring-emerald-200"
                   />
                 </div>
