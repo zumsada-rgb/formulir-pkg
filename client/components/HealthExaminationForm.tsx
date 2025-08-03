@@ -367,8 +367,13 @@ export default function HealthExaminationForm() {
                   value={formData.nama}
                   onChange={handleInputChange}
                   required
-                  className="border-gray-200 focus:border-emerald-300 focus:ring-emerald-200"
+                  className={`border-gray-200 focus:border-emerald-300 focus:ring-emerald-200 ${
+                    errors.nama ? 'border-red-300 focus:border-red-300 focus:ring-red-200' : ''
+                  }`}
                 />
+                {errors.nama && (
+                  <p className="text-red-500 text-xs mt-1">{errors.nama}</p>
+                )}
               </div>
 
               {/* Row 2: Kelas/Ruang, Jurusan */}
@@ -390,7 +395,11 @@ export default function HealthExaminationForm() {
                     placeholder="Pilih kelas/ruang"
                     emptyText="Kelas tidak ditemukan"
                     maxVisibleItems={6}
+                    className={errors.kelasRuang ? 'border-red-300' : ''}
                   />
+                  {errors.kelasRuang && (
+                    <p className="text-red-500 text-xs mt-1">{errors.kelasRuang}</p>
+                  )}
                 </div>
                 <div className="space-y-2">
                   <Label
@@ -409,7 +418,11 @@ export default function HealthExaminationForm() {
                     placeholder="Pilih jurusan"
                     emptyText="Jurusan tidak ditemukan"
                     maxVisibleItems={6}
+                    className={errors.jurusan ? 'border-red-300' : ''}
                   />
+                  {errors.jurusan && (
+                    <p className="text-red-500 text-xs mt-1">{errors.jurusan}</p>
+                  )}
                 </div>
               </div>
 
@@ -423,20 +436,24 @@ export default function HealthExaminationForm() {
                     <IdCard className="w-4 h-4 text-emerald-600" />
                     NIK *
                   </Label>
-                  <Input
-                    id="nik"
-                    name="nik"
-                    type="number"
-                    inputMode="numeric"
+                  <IMaskInput
+                    mask="0000 0000 0000 0000"
                     placeholder="16 digit NIK"
                     value={formData.nik}
-                    onChange={handleInputChange}
-                    required
-                    maxLength={16}
-                    pattern="[0-9]{16}"
-                    min="0"
-                    className="border-gray-200 focus:border-emerald-300 focus:ring-emerald-200"
+                    onAccept={(value: string) => {
+                      const cleanValue = value.replace(/\s/g, '');
+                      setFormData(prev => ({ ...prev, nik: cleanValue }));
+                      if (errors.nik) {
+                        setErrors(prev => ({ ...prev, nik: undefined }));
+                      }
+                    }}
+                    className={`flex h-10 w-full rounded-md border bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 border-gray-200 focus:border-emerald-300 focus:ring-emerald-200 ${
+                      errors.nik ? 'border-red-300 focus:border-red-300 focus:ring-red-200' : ''
+                    }`}
                   />
+                  {errors.nik && (
+                    <p className="text-red-500 text-xs mt-1">{errors.nik}</p>
+                  )}
                 </div>
                 <div className="space-y-2">
                   <Label
@@ -446,20 +463,24 @@ export default function HealthExaminationForm() {
                     <IdCard className="w-4 h-4 text-emerald-600" />
                     NISN *
                   </Label>
-                  <Input
-                    id="nisn"
-                    name="nisn"
-                    type="number"
-                    inputMode="numeric"
+                  <IMaskInput
+                    mask="0000 0000 00"
                     placeholder="10 digit NISN"
                     value={formData.nisn}
-                    onChange={handleInputChange}
-                    required
-                    maxLength={10}
-                    pattern="[0-9]{10}"
-                    min="0"
-                    className="border-gray-200 focus:border-emerald-300 focus:ring-emerald-200"
+                    onAccept={(value: string) => {
+                      const cleanValue = value.replace(/\s/g, '');
+                      setFormData(prev => ({ ...prev, nisn: cleanValue }));
+                      if (errors.nisn) {
+                        setErrors(prev => ({ ...prev, nisn: undefined }));
+                      }
+                    }}
+                    className={`flex h-10 w-full rounded-md border bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 border-gray-200 focus:border-emerald-300 focus:ring-emerald-200 ${
+                      errors.nisn ? 'border-red-300 focus:border-red-300 focus:ring-red-200' : ''
+                    }`}
                   />
+                  {errors.nisn && (
+                    <p className="text-red-500 text-xs mt-1">{errors.nisn}</p>
+                  )}
                 </div>
               </div>
 
@@ -478,18 +499,23 @@ export default function HealthExaminationForm() {
                       htmlFor="tempatLahir"
                       className="text-sm font-medium text-gray-600"
                     >
-                      Tempat *
+                      Tempat Lahir *
                     </Label>
                     <Input
                       id="tempatLahir"
                       name="tempatLahir"
                       type="text"
-                      placeholder="Kota tempat lahir"
+                      placeholder="Tempat Lahir"
                       value={formData.tempatLahir}
                       onChange={handleInputChange}
                       required
-                      className="border-gray-200 focus:border-emerald-300 focus:ring-emerald-200"
+                      className={`border-gray-200 focus:border-emerald-300 focus:ring-emerald-200 ${
+                        errors.tempatLahir ? 'border-red-300 focus:border-red-300 focus:ring-red-200' : ''
+                      }`}
                     />
+                    {errors.tempatLahir && (
+                      <p className="text-red-500 text-xs mt-1">{errors.tempatLahir}</p>
+                    )}
                   </div>
                   <div className="space-y-2 flex flex-col">
                     <Label
@@ -505,8 +531,13 @@ export default function HealthExaminationForm() {
                       value={formData.tanggalLahir}
                       onChange={handleInputChange}
                       required
-                      className="border-gray-200 focus:border-emerald-300 focus:ring-emerald-200 flex flex-col"
+                      className={`border-gray-200 focus:border-emerald-300 focus:ring-emerald-200 flex flex-col ${
+                        errors.tanggalLahir ? 'border-red-300 focus:border-red-300 focus:ring-red-200' : ''
+                      }`}
                     />
+                    {errors.tanggalLahir && (
+                      <p className="text-red-500 text-xs mt-1">{errors.tanggalLahir}</p>
+                    )}
                   </div>
                 </div>
 
@@ -538,8 +569,13 @@ export default function HealthExaminationForm() {
                   value={formData.email}
                   onChange={handleInputChange}
                   required
-                  className="border-gray-200 focus:border-emerald-300 focus:ring-emerald-200"
+                  className={`border-gray-200 focus:border-emerald-300 focus:ring-emerald-200 ${
+                    errors.email ? 'border-red-300 focus:border-red-300 focus:ring-red-200' : ''
+                  }`}
                 />
+                {errors.email && (
+                  <p className="text-red-500 text-xs mt-1">{errors.email}</p>
+                )}
               </div>
 
               {/* Row 6: Nomor HP */}
@@ -560,9 +596,13 @@ export default function HealthExaminationForm() {
                   value={formData.nomorHp}
                   onChange={handleInputChange}
                   required
-                  min="0"
-                  className="border-gray-200 focus:border-emerald-300 focus:ring-emerald-200"
+                  className={`border-gray-200 focus:border-emerald-300 focus:ring-emerald-200 ${
+                    errors.nomorHp ? 'border-red-300 focus:border-red-300 focus:ring-red-200' : ''
+                  }`}
                 />
+                {errors.nomorHp && (
+                  <p className="text-red-500 text-xs mt-1">{errors.nomorHp}</p>
+                )}
               </div>
 
               {/* Row 7: Alamat Lengkap */}
@@ -582,8 +622,13 @@ export default function HealthExaminationForm() {
                   onChange={handleInputChange}
                   required
                   rows={3}
-                  className="border-gray-200 focus:border-emerald-300 focus:ring-emerald-200 resize-none"
+                  className={`border-gray-200 focus:border-emerald-300 focus:ring-emerald-200 resize-none ${
+                    errors.alamat ? 'border-red-300 focus:border-red-300 focus:ring-red-200' : ''
+                  }`}
                 />
+                {errors.alamat && (
+                  <p className="text-red-500 text-xs mt-1">{errors.alamat}</p>
+                )}
               </div>
 
               {/* Submit Button */}
