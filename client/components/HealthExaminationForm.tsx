@@ -62,7 +62,14 @@ const kelasOptions = [
   },
 ];
 
-const jurusanOptions = ["TKR", "TSM", "DKV", "TKJ", "BISDIG", "DPB"];
+const jurusanOptions = [
+  { value: "TKR", label: "TKR" },
+  { value: "TSM", label: "TSM" },
+  { value: "DKV", label: "DKV" },
+  { value: "TKJ", label: "TKJ" },
+  { value: "BISDIG", label: "BISDIG" },
+  { value: "DPB", label: "DPB" }
+];
 
 const monthNames = [
   "Januari",
