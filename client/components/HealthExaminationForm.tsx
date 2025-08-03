@@ -153,12 +153,12 @@ export default function HealthExaminationForm() {
     }
   };
 
-  // Validasi real-time
+  // Validasi real-time dengan kriteria yang lebih spesifik
   const validateField = (name: string, value: string): string | undefined => {
     switch (name) {
       case 'nama':
-        if (!value.trim()) return 'Nama lengkap wajib diisi';
-        if (value.trim().length < 2) return 'Nama terlalu pendek';
+        if (!value.trim()) return 'Nama Lengkap wajib diisi';
+        if (value.trim().length < 3) return 'Nama Lengkap minimal 3 karakter';
         break;
       case 'nik':
         if (!value) return 'NIK wajib diisi';
@@ -169,23 +169,23 @@ export default function HealthExaminationForm() {
         if (value.length !== 10) return 'NISN harus 10 digit';
         break;
       case 'email':
-        if (!value) return 'Email wajib diisi';
+        if (!value.trim()) return 'Email wajib diisi';
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         if (!emailRegex.test(value)) return 'Format email tidak valid';
         break;
       case 'nomorHp':
-        if (!value) return 'Nomor HP wajib diisi';
-        if (value.length < 10) return 'Nomor HP terlalu pendek';
+        if (!value.trim()) return 'Nomor HP wajib diisi';
+        if (value.trim().length < 11) return 'Nomor HP minimal 11 digit';
         break;
       case 'tempatLahir':
-        if (!value.trim()) return 'Tempat lahir wajib diisi';
+        if (!value.trim()) return 'Tempat Lahir wajib diisi';
         break;
       case 'tanggalLahir':
-        if (!value) return 'Tanggal lahir wajib diisi';
+        if (!value) return 'Tanggal Lahir wajib diisi';
         break;
       case 'alamat':
-        if (!value.trim()) return 'Alamat wajib diisi';
-        if (value.trim().length < 10) return 'Alamat terlalu singkat';
+        if (!value.trim()) return 'Alamat Lengkap wajib diisi';
+        if (value.trim().length < 10) return 'Alamat Lengkap minimal 10 karakter';
         break;
       case 'kelasRuang':
         if (!value) return 'Kelas/Ruang wajib dipilih';
@@ -195,6 +195,13 @@ export default function HealthExaminationForm() {
         break;
     }
     return undefined;
+  };
+
+  // Handler untuk blur validation
+  const handleBlur = (e: React.FocusEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const { name, value } = e.target;
+    const error = validateField(name, value);
+    setErrors(prev => ({ ...prev, [name]: error }));
   };
 
   // Validasi semua field
@@ -366,6 +373,7 @@ export default function HealthExaminationForm() {
                   placeholder="Masukkan nama lengkap"
                   value={formData.nama}
                   onChange={handleInputChange}
+                  onBlur={handleBlur}
                   required
                   className={`border-gray-200 focus:border-emerald-300 focus:ring-emerald-200 ${
                     errors.nama ? 'border-red-300 focus:border-red-300 focus:ring-red-200' : ''
@@ -437,15 +445,19 @@ export default function HealthExaminationForm() {
                     NIK *
                   </Label>
                   <IMaskInput
-                    mask="0000 0000 0000 0000"
+                    mask="0000000000000000"
+                    lazy={true}
                     placeholder="16 digit NIK"
                     value={formData.nik}
                     onAccept={(value: string) => {
-                      const cleanValue = value.replace(/\s/g, '');
-                      setFormData(prev => ({ ...prev, nik: cleanValue }));
-                      if (errors.nik) {
+                      setFormData(prev => ({ ...prev, nik: value }));
+                      if (errors.nik && value.length === 16) {
                         setErrors(prev => ({ ...prev, nik: undefined }));
                       }
+                    }}
+                    onBlur={() => {
+                      const error = validateField('nik', formData.nik);
+                      setErrors(prev => ({ ...prev, nik: error }));
                     }}
                     className={`flex h-10 w-full rounded-md border bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 border-gray-200 focus:border-emerald-300 focus:ring-emerald-200 ${
                       errors.nik ? 'border-red-300 focus:border-red-300 focus:ring-red-200' : ''
@@ -464,15 +476,19 @@ export default function HealthExaminationForm() {
                     NISN *
                   </Label>
                   <IMaskInput
-                    mask="0000 0000 00"
+                    mask="0000000000"
+                    lazy={true}
                     placeholder="10 digit NISN"
                     value={formData.nisn}
                     onAccept={(value: string) => {
-                      const cleanValue = value.replace(/\s/g, '');
-                      setFormData(prev => ({ ...prev, nisn: cleanValue }));
-                      if (errors.nisn) {
+                      setFormData(prev => ({ ...prev, nisn: value }));
+                      if (errors.nisn && value.length === 10) {
                         setErrors(prev => ({ ...prev, nisn: undefined }));
                       }
+                    }}
+                    onBlur={() => {
+                      const error = validateField('nisn', formData.nisn);
+                      setErrors(prev => ({ ...prev, nisn: error }));
                     }}
                     className={`flex h-10 w-full rounded-md border bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 border-gray-200 focus:border-emerald-300 focus:ring-emerald-200 ${
                       errors.nisn ? 'border-red-300 focus:border-red-300 focus:ring-red-200' : ''
@@ -508,6 +524,7 @@ export default function HealthExaminationForm() {
                       placeholder="Tempat Lahir"
                       value={formData.tempatLahir}
                       onChange={handleInputChange}
+                      onBlur={handleBlur}
                       required
                       className={`border-gray-200 focus:border-emerald-300 focus:ring-emerald-200 ${
                         errors.tempatLahir ? 'border-red-300 focus:border-red-300 focus:ring-red-200' : ''
@@ -530,6 +547,7 @@ export default function HealthExaminationForm() {
                       type="date"
                       value={formData.tanggalLahir}
                       onChange={handleInputChange}
+                      onBlur={handleBlur}
                       required
                       className={`border-gray-200 focus:border-emerald-300 focus:ring-emerald-200 flex flex-col ${
                         errors.tanggalLahir ? 'border-red-300 focus:border-red-300 focus:ring-red-200' : ''
@@ -568,6 +586,7 @@ export default function HealthExaminationForm() {
                   placeholder="contoh@email.com"
                   value={formData.email}
                   onChange={handleInputChange}
+                  onBlur={handleBlur}
                   required
                   className={`border-gray-200 focus:border-emerald-300 focus:ring-emerald-200 ${
                     errors.email ? 'border-red-300 focus:border-red-300 focus:ring-red-200' : ''
@@ -595,6 +614,7 @@ export default function HealthExaminationForm() {
                   placeholder="08xxxxxxxxxx"
                   value={formData.nomorHp}
                   onChange={handleInputChange}
+                  onBlur={handleBlur}
                   required
                   className={`border-gray-200 focus:border-emerald-300 focus:ring-emerald-200 ${
                     errors.nomorHp ? 'border-red-300 focus:border-red-300 focus:ring-red-200' : ''
@@ -620,6 +640,7 @@ export default function HealthExaminationForm() {
                   placeholder="Alamat lengkap tempat tinggal (jalan, RT/RW, kelurahan, kecamatan, kota/kabupaten, provinsi)"
                   value={formData.alamat}
                   onChange={handleInputChange}
+                  onBlur={handleBlur}
                   required
                   rows={3}
                   className={`border-gray-200 focus:border-emerald-300 focus:ring-emerald-200 resize-none ${
