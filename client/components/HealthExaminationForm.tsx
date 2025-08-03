@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { IMaskInput } from "react-imask";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -35,6 +36,19 @@ interface FormData {
   email: string;
   nomorHp: string;
   alamat: string;
+}
+
+interface FormErrors {
+  nama?: string;
+  kelasRuang?: string;
+  jurusan?: string;
+  nik?: string;
+  nisn?: string;
+  tempatLahir?: string;
+  tanggalLahir?: string;
+  email?: string;
+  nomorHp?: string;
+  alamat?: string;
 }
 
 const kelasOptions = [
@@ -102,16 +116,100 @@ export default function HealthExaminationForm() {
 
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
+  const [errors, setErrors] = useState<FormErrors>({});
+
+  // Fungsi untuk capitalize
+  const capitalize = (str: string) => {
+    return str.split(' ').map(word =>
+      word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()
+    ).join(' ');
+  };
 
   const handleInputChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
   ) => {
     const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
+    let processedValue = value;
+
+    // Auto capitalize untuk nama dan tempat lahir
+    if (name === 'nama' || name === 'tempatLahir') {
+      processedValue = capitalize(value);
+    }
+
+    setFormData((prev) => ({ ...prev, [name]: processedValue }));
+
+    // Clear error ketika user mulai mengetik
+    if (errors[name as keyof FormErrors]) {
+      setErrors(prev => ({ ...prev, [name]: undefined }));
+    }
   };
 
   const handleSelectChange = (name: string, value: string) => {
     setFormData((prev) => ({ ...prev, [name]: value }));
+
+    // Clear error ketika user memilih
+    if (errors[name as keyof FormErrors]) {
+      setErrors(prev => ({ ...prev, [name]: undefined }));
+    }
+  };
+
+  // Validasi real-time
+  const validateField = (name: string, value: string): string | undefined => {
+    switch (name) {
+      case 'nama':
+        if (!value.trim()) return 'Nama lengkap wajib diisi';
+        if (value.trim().length < 2) return 'Nama terlalu pendek';
+        break;
+      case 'nik':
+        if (!value) return 'NIK wajib diisi';
+        if (value.length !== 16) return 'NIK harus 16 digit';
+        break;
+      case 'nisn':
+        if (!value) return 'NISN wajib diisi';
+        if (value.length !== 10) return 'NISN harus 10 digit';
+        break;
+      case 'email':
+        if (!value) return 'Email wajib diisi';
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(value)) return 'Format email tidak valid';
+        break;
+      case 'nomorHp':
+        if (!value) return 'Nomor HP wajib diisi';
+        if (value.length < 10) return 'Nomor HP terlalu pendek';
+        break;
+      case 'tempatLahir':
+        if (!value.trim()) return 'Tempat lahir wajib diisi';
+        break;
+      case 'tanggalLahir':
+        if (!value) return 'Tanggal lahir wajib diisi';
+        break;
+      case 'alamat':
+        if (!value.trim()) return 'Alamat wajib diisi';
+        if (value.trim().length < 10) return 'Alamat terlalu singkat';
+        break;
+      case 'kelasRuang':
+        if (!value) return 'Kelas/Ruang wajib dipilih';
+        break;
+      case 'jurusan':
+        if (!value) return 'Jurusan wajib dipilih';
+        break;
+    }
+    return undefined;
+  };
+
+  // Validasi semua field
+  const validateForm = (): boolean => {
+    const newErrors: FormErrors = {};
+
+    Object.keys(formData).forEach(key => {
+      const error = validateField(key, formData[key as keyof FormData]);
+      if (error) {
+        newErrors[key as keyof FormErrors] = error;
+      }
+    });
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
   };
 
   const formatTTLPreview = () => {
@@ -134,6 +232,12 @@ export default function HealthExaminationForm() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    // Validasi form sebelum submit
+    if (!validateForm()) {
+      return; // Stop jika ada error
+    }
+
     setIsSubmitting(true);
 
     try {
@@ -158,7 +262,6 @@ export default function HealthExaminationForm() {
     } catch (error) {
       console.error('Error submitting form:', error);
       setIsSubmitting(false);
-      // Bisa tambahkan error handling di sini
       alert('Terjadi kesalahan saat mengirim data. Silakan coba lagi.');
     }
   };
@@ -177,6 +280,7 @@ export default function HealthExaminationForm() {
       alamat: "",
     });
     setSubmitted(false);
+    setErrors({});
   };
 
   if (submitted) {
