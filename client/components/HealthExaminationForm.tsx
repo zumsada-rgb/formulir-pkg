@@ -275,38 +275,29 @@ export default function HealthExaminationForm() {
                     <Calendar className="w-4 h-4 text-emerald-600" />
                     Tempat Tanggal Lahir (TTL) *
                   </Label>
-                  {/* Preview */}
-                  {(formData.tempatLahir || formData.tanggalLahir) && (
-                    <div className="bg-emerald-50 border border-emerald-200 rounded-md p-3 mb-3">
-                      <p className="text-sm text-emerald-700 font-medium">Pratinjau TTL:</p>
-                      <p className="text-emerald-800 font-semibold">{formatTTLPreview()}</p>
-                    </div>
-                  )}
                 </div>
-                
+
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  <div className="space-y-2 flex flex-col sm:flex-row sm:items-end sm:gap-3">
-                    <div className="flex-1">
-                      <Label htmlFor="tempatLahir" className="text-sm font-medium text-gray-600">
-                        Tempat Lahir *
-                      </Label>
-                      <Input
-                        id="tempatLahir"
-                        name="tempatLahir"
-                        type="text"
-                        placeholder="Kota tempat lahir"
-                        value={formData.tempatLahir}
-                        onChange={handleInputChange}
-                        required
-                        className="border-gray-200 focus:border-emerald-300 focus:ring-emerald-200 mt-1"
-                      />
-                    </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="tempatLahir" className="text-sm font-medium text-gray-600">
+                      Tempat Lahir *
+                    </Label>
+                    <Input
+                      id="tempatLahir"
+                      name="tempatLahir"
+                      type="text"
+                      placeholder="Kota tempat lahir"
+                      value={formData.tempatLahir}
+                      onChange={handleInputChange}
+                      required
+                      className="border-gray-200 focus:border-emerald-300 focus:ring-emerald-200"
+                    />
                   </div>
-                  <div className="space-y-2 flex flex-col sm:flex-row sm:items-end sm:gap-3">
-                    <div className="flex-1">
-                      <Label htmlFor="tanggalLahir" className="text-sm font-medium text-gray-600">
-                        Tanggal Lahir (DD/MM/YYYY) *
-                      </Label>
+                  <div className="space-y-2">
+                    <Label htmlFor="tanggalLahir" className="text-sm font-medium text-gray-600">
+                      Tanggal Lahir (DD/MM/YYYY) *
+                    </Label>
+                    <div className="relative">
                       <Input
                         id="tanggalLahir"
                         name="tanggalLahir"
@@ -314,10 +305,17 @@ export default function HealthExaminationForm() {
                         value={formData.tanggalLahir}
                         onChange={handleInputChange}
                         required
-                        className="border-gray-200 focus:border-emerald-300 focus:ring-emerald-200 mt-1 sm:ml-auto sm:text-center"
+                        className="border-gray-200 focus:border-emerald-300 focus:ring-emerald-200 pr-10"
                       />
+                      <Calendar className="absolute right-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400 pointer-events-none" />
                     </div>
                   </div>
+                </div>
+
+                {/* Preview - Always visible and below inputs */}
+                <div className="bg-emerald-50 border border-emerald-200 rounded-md p-3">
+                  <p className="text-sm text-emerald-700 font-medium">Pratinjau TTL:</p>
+                  <p className="text-emerald-800 font-semibold">{formatTTLPreview()}</p>
                 </div>
               </div>
 
