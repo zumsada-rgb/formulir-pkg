@@ -2,6 +2,8 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue, SelectGroup, SelectLabel } from "@/components/ui/select";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Stethoscope, Heart, UserCheck, Calendar, MapPin, Mail, Phone, IdCard, GraduationCap, Building } from "lucide-react";
 
@@ -10,13 +12,25 @@ interface FormData {
   kelasRuang: string;
   jurusan: string;
   nik: string;
-  tempat: string;
-  tglLahir: string;
-  alamat: string;
-  email: string;
   nisn: string;
+  tempatLahir: string;
+  tanggalLahir: string;
+  email: string;
   nomorHp: string;
+  alamat: string;
 }
+
+const kelasOptions = [
+  { group: "Kelas X", items: ["X-1", "X-2", "X-3", "X-4", "X-5", "X-6"] },
+  { group: "Kelas XI", items: ["XI-1", "XI-2", "XI-3", "XI-4", "XI-5", "XI-6"] }
+];
+
+const jurusanOptions = ["TKR", "TSM", "DKV", "TKJ", "BISDIG", "DPB"];
+
+const monthNames = [
+  "Januari", "Februari", "Maret", "April", "Mei", "Juni",
+  "Juli", "Agustus", "September", "Oktober", "November", "Desember"
+];
 
 export default function HealthExaminationForm() {
   const [formData, setFormData] = useState<FormData>({
@@ -24,20 +38,42 @@ export default function HealthExaminationForm() {
     kelasRuang: "",
     jurusan: "",
     nik: "",
-    tempat: "",
-    tglLahir: "",
-    alamat: "",
-    email: "",
     nisn: "",
+    tempatLahir: "",
+    tanggalLahir: "",
+    email: "",
     nomorHp: "",
+    alamat: "",
   });
 
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
     setFormData(prev => ({ ...prev, [name]: value }));
+  };
+
+  const handleSelectChange = (name: string, value: string) => {
+    setFormData(prev => ({ ...prev, [name]: value }));
+  };
+
+  const formatTTLPreview = () => {
+    if (!formData.tempatLahir && !formData.tanggalLahir) return "";
+    
+    let preview = formData.tempatLahir || "[Tempat]";
+    
+    if (formData.tanggalLahir) {
+      const date = new Date(formData.tanggalLahir);
+      const day = date.getDate().toString().padStart(2, '0');
+      const month = monthNames[date.getMonth()];
+      const year = date.getFullYear();
+      preview += `, ${day} ${month} ${year}`;
+    } else {
+      preview += ", [DD/MM/YYYY]";
+    }
+    
+    return preview;
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -58,12 +94,12 @@ export default function HealthExaminationForm() {
       kelasRuang: "",
       jurusan: "",
       nik: "",
-      tempat: "",
-      tglLahir: "",
-      alamat: "",
-      email: "",
       nisn: "",
+      tempatLahir: "",
+      tanggalLahir: "",
+      email: "",
       nomorHp: "",
+      alamat: "",
     });
     setSubmitted(false);
   };
@@ -129,60 +165,71 @@ export default function HealthExaminationForm() {
           </CardHeader>
           <CardContent>
             <form onSubmit={handleSubmit} className="space-y-6">
-              {/* Row 1: Nama, Kelas/Ruang */}
+              {/* Row 1: Nama */}
+              <div className="space-y-2">
+                <Label htmlFor="nama" className="text-sm font-semibold text-gray-700 flex items-center gap-2">
+                  <UserCheck className="w-4 h-4 text-emerald-600" />
+                  Nama Lengkap *
+                </Label>
+                <Input
+                  id="nama"
+                  name="nama"
+                  type="text"
+                  placeholder="Masukkan nama lengkap"
+                  value={formData.nama}
+                  onChange={handleInputChange}
+                  required
+                  className="border-gray-200 focus:border-emerald-300 focus:ring-emerald-200"
+                />
+              </div>
+
+              {/* Row 2: Kelas/Ruang, Jurusan */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div className="space-y-2">
-                  <Label htmlFor="nama" className="text-sm font-semibold text-gray-700 flex items-center gap-2">
-                    <UserCheck className="w-4 h-4 text-emerald-600" />
-                    Nama Lengkap *
-                  </Label>
-                  <Input
-                    id="nama"
-                    name="nama"
-                    type="text"
-                    placeholder="Masukkan nama lengkap"
-                    value={formData.nama}
-                    onChange={handleInputChange}
-                    required
-                    className="border-gray-200 focus:border-emerald-300 focus:ring-emerald-200"
-                  />
-                </div>
                 <div className="space-y-2">
                   <Label htmlFor="kelasRuang" className="text-sm font-semibold text-gray-700 flex items-center gap-2">
                     <Building className="w-4 h-4 text-emerald-600" />
                     Kelas/Ruang *
                   </Label>
-                  <Input
-                    id="kelasRuang"
-                    name="kelasRuang"
-                    type="text"
-                    placeholder="Contoh: XII IPA 1"
-                    value={formData.kelasRuang}
-                    onChange={handleInputChange}
-                    required
-                    className="border-gray-200 focus:border-emerald-300 focus:ring-emerald-200"
-                  />
+                  <Select value={formData.kelasRuang} onValueChange={(value) => handleSelectChange("kelasRuang", value)}>
+                    <SelectTrigger className="border-gray-200 focus:border-emerald-300 focus:ring-emerald-200">
+                      <SelectValue placeholder="Pilih kelas/ruang" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {kelasOptions.map((group) => (
+                        <SelectGroup key={group.group}>
+                          <SelectLabel>{group.group}</SelectLabel>
+                          {group.items.map((item) => (
+                            <SelectItem key={item} value={item}>
+                              {item}
+                            </SelectItem>
+                          ))}
+                        </SelectGroup>
+                      ))}
+                    </SelectContent>
+                  </Select>
                 </div>
-              </div>
-
-              {/* Row 2: Jurusan, NIK */}
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div className="space-y-2">
                   <Label htmlFor="jurusan" className="text-sm font-semibold text-gray-700 flex items-center gap-2">
                     <GraduationCap className="w-4 h-4 text-emerald-600" />
                     Jurusan *
                   </Label>
-                  <Input
-                    id="jurusan"
-                    name="jurusan"
-                    type="text"
-                    placeholder="Contoh: IPA, IPS, Teknik"
-                    value={formData.jurusan}
-                    onChange={handleInputChange}
-                    required
-                    className="border-gray-200 focus:border-emerald-300 focus:ring-emerald-200"
-                  />
+                  <Select value={formData.jurusan} onValueChange={(value) => handleSelectChange("jurusan", value)}>
+                    <SelectTrigger className="border-gray-200 focus:border-emerald-300 focus:ring-emerald-200">
+                      <SelectValue placeholder="Pilih jurusan" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {jurusanOptions.map((jurusan) => (
+                        <SelectItem key={jurusan} value={jurusan}>
+                          {jurusan}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
                 </div>
+              </div>
+
+              {/* Row 3: NIK, NISN */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div className="space-y-2">
                   <Label htmlFor="nik" className="text-sm font-semibold text-gray-700 flex items-center gap-2">
                     <IdCard className="w-4 h-4 text-emerald-600" />
@@ -198,79 +245,6 @@ export default function HealthExaminationForm() {
                     required
                     maxLength={16}
                     pattern="[0-9]{16}"
-                    className="border-gray-200 focus:border-emerald-300 focus:ring-emerald-200"
-                  />
-                </div>
-              </div>
-
-              {/* Row 3: Tempat Lahir, Tanggal Lahir */}
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div className="space-y-2">
-                  <Label htmlFor="tempat" className="text-sm font-semibold text-gray-700 flex items-center gap-2">
-                    <MapPin className="w-4 h-4 text-emerald-600" />
-                    Tempat Lahir *
-                  </Label>
-                  <Input
-                    id="tempat"
-                    name="tempat"
-                    type="text"
-                    placeholder="Kota tempat lahir"
-                    value={formData.tempat}
-                    onChange={handleInputChange}
-                    required
-                    className="border-gray-200 focus:border-emerald-300 focus:ring-emerald-200"
-                  />
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="tglLahir" className="text-sm font-semibold text-gray-700 flex items-center gap-2">
-                    <Calendar className="w-4 h-4 text-emerald-600" />
-                    Tanggal Lahir *
-                  </Label>
-                  <Input
-                    id="tglLahir"
-                    name="tglLahir"
-                    type="date"
-                    value={formData.tglLahir}
-                    onChange={handleInputChange}
-                    required
-                    className="border-gray-200 focus:border-emerald-300 focus:ring-emerald-200"
-                  />
-                </div>
-              </div>
-
-              {/* Row 4: Alamat */}
-              <div className="space-y-2">
-                <Label htmlFor="alamat" className="text-sm font-semibold text-gray-700 flex items-center gap-2">
-                  <MapPin className="w-4 h-4 text-emerald-600" />
-                  Alamat Lengkap *
-                </Label>
-                <Input
-                  id="alamat"
-                  name="alamat"
-                  type="text"
-                  placeholder="Alamat lengkap tempat tinggal"
-                  value={formData.alamat}
-                  onChange={handleInputChange}
-                  required
-                  className="border-gray-200 focus:border-emerald-300 focus:ring-emerald-200"
-                />
-              </div>
-
-              {/* Row 5: Email, NISN */}
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div className="space-y-2">
-                  <Label htmlFor="email" className="text-sm font-semibold text-gray-700 flex items-center gap-2">
-                    <Mail className="w-4 h-4 text-emerald-600" />
-                    Email *
-                  </Label>
-                  <Input
-                    id="email"
-                    name="email"
-                    type="email"
-                    placeholder="contoh@email.com"
-                    value={formData.email}
-                    onChange={handleInputChange}
-                    required
                     className="border-gray-200 focus:border-emerald-300 focus:ring-emerald-200"
                   />
                 </div>
@@ -294,6 +268,77 @@ export default function HealthExaminationForm() {
                 </div>
               </div>
 
+              {/* Row 4: TTL Group with Preview */}
+              <div className="space-y-4">
+                <div className="space-y-2">
+                  <Label className="text-sm font-semibold text-gray-700 flex items-center gap-2">
+                    <Calendar className="w-4 h-4 text-emerald-600" />
+                    Tempat Tanggal Lahir (TTL) *
+                  </Label>
+                  {/* Preview */}
+                  {(formData.tempatLahir || formData.tanggalLahir) && (
+                    <div className="bg-emerald-50 border border-emerald-200 rounded-md p-3 mb-3">
+                      <p className="text-sm text-emerald-700 font-medium">Pratinjau TTL:</p>
+                      <p className="text-emerald-800 font-semibold">{formatTTLPreview()}</p>
+                    </div>
+                  )}
+                </div>
+                
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div className="space-y-2 flex flex-col sm:flex-row sm:items-end sm:gap-3">
+                    <div className="flex-1">
+                      <Label htmlFor="tempatLahir" className="text-sm font-medium text-gray-600">
+                        Tempat Lahir *
+                      </Label>
+                      <Input
+                        id="tempatLahir"
+                        name="tempatLahir"
+                        type="text"
+                        placeholder="Kota tempat lahir"
+                        value={formData.tempatLahir}
+                        onChange={handleInputChange}
+                        required
+                        className="border-gray-200 focus:border-emerald-300 focus:ring-emerald-200 mt-1"
+                      />
+                    </div>
+                  </div>
+                  <div className="space-y-2 flex flex-col sm:flex-row sm:items-end sm:gap-3">
+                    <div className="flex-1">
+                      <Label htmlFor="tanggalLahir" className="text-sm font-medium text-gray-600">
+                        Tanggal Lahir (DD/MM/YYYY) *
+                      </Label>
+                      <Input
+                        id="tanggalLahir"
+                        name="tanggalLahir"
+                        type="date"
+                        value={formData.tanggalLahir}
+                        onChange={handleInputChange}
+                        required
+                        className="border-gray-200 focus:border-emerald-300 focus:ring-emerald-200 mt-1 sm:ml-auto sm:text-center"
+                      />
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Row 5: Email */}
+              <div className="space-y-2">
+                <Label htmlFor="email" className="text-sm font-semibold text-gray-700 flex items-center gap-2">
+                  <Mail className="w-4 h-4 text-emerald-600" />
+                  Email *
+                </Label>
+                <Input
+                  id="email"
+                  name="email"
+                  type="email"
+                  placeholder="contoh@email.com"
+                  value={formData.email}
+                  onChange={handleInputChange}
+                  required
+                  className="border-gray-200 focus:border-emerald-300 focus:ring-emerald-200"
+                />
+              </div>
+
               {/* Row 6: Nomor HP */}
               <div className="space-y-2">
                 <Label htmlFor="nomorHp" className="text-sm font-semibold text-gray-700 flex items-center gap-2">
@@ -309,6 +354,24 @@ export default function HealthExaminationForm() {
                   onChange={handleInputChange}
                   required
                   className="border-gray-200 focus:border-emerald-300 focus:ring-emerald-200"
+                />
+              </div>
+
+              {/* Row 7: Alamat Lengkap */}
+              <div className="space-y-2">
+                <Label htmlFor="alamat" className="text-sm font-semibold text-gray-700 flex items-center gap-2">
+                  <MapPin className="w-4 h-4 text-emerald-600" />
+                  Alamat Lengkap *
+                </Label>
+                <Textarea
+                  id="alamat"
+                  name="alamat"
+                  placeholder="Alamat lengkap tempat tinggal (jalan, RT/RW, kelurahan, kecamatan, kota/kabupaten, provinsi)"
+                  value={formData.alamat}
+                  onChange={handleInputChange}
+                  required
+                  rows={3}
+                  className="border-gray-200 focus:border-emerald-300 focus:ring-emerald-200 resize-none"
                 />
               </div>
 
