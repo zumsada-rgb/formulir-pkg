@@ -277,23 +277,16 @@ export default function HealthExaminationForm() {
                     <GraduationCap className="w-4 h-4 text-emerald-600" />
                     Jurusan *
                   </Label>
-                  <Select
+                  <Combobox
+                    options={jurusanOptions}
                     value={formData.jurusan}
                     onValueChange={(value) =>
                       handleSelectChange("jurusan", value)
                     }
-                  >
-                    <SelectTrigger className="border-gray-200 focus:border-emerald-300 focus:ring-emerald-200">
-                      <SelectValue placeholder="Pilih jurusan" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {jurusanOptions.map((jurusan) => (
-                        <SelectItem key={jurusan} value={jurusan}>
-                          {jurusan}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
+                    placeholder="Pilih jurusan"
+                    emptyText="Jurusan tidak ditemukan"
+                    maxVisibleItems={6}
+                  />
                 </div>
               </div>
 
