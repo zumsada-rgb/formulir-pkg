@@ -38,10 +38,27 @@ interface FormData {
 }
 
 const kelasOptions = [
-  { group: "Kelas X", items: ["X-1", "X-2", "X-3", "X-4", "X-5", "X-6"] },
   {
-    group: "Kelas XI",
-    items: ["XI-1", "XI-2", "XI-3", "XI-4", "XI-5", "XI-6"],
+    label: "Kelas X",
+    options: [
+      { value: "X-1", label: "X-1" },
+      { value: "X-2", label: "X-2" },
+      { value: "X-3", label: "X-3" },
+      { value: "X-4", label: "X-4" },
+      { value: "X-5", label: "X-5" },
+      { value: "X-6", label: "X-6" }
+    ]
+  },
+  {
+    label: "Kelas XI",
+    options: [
+      { value: "XI-1", label: "XI-1" },
+      { value: "XI-2", label: "XI-2" },
+      { value: "XI-3", label: "XI-3" },
+      { value: "XI-4", label: "XI-4" },
+      { value: "XI-5", label: "XI-5" },
+      { value: "XI-6", label: "XI-6" }
+    ]
   },
 ];
 
