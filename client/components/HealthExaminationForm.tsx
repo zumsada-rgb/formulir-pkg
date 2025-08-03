@@ -293,7 +293,7 @@ export default function HealthExaminationForm() {
                       className="border-gray-200 focus:border-emerald-300 focus:ring-emerald-200"
                     />
                   </div>
-                  <div className="space-y-2">
+                  <div className="space-y-2 flex flex-col">
                     <Label htmlFor="tanggalLahir" className="text-sm font-medium text-gray-600">
                       Tanggal Lahir (DD/MM/YYYY) *
                     </Label>
@@ -304,7 +304,7 @@ export default function HealthExaminationForm() {
                       value={formData.tanggalLahir}
                       onChange={handleInputChange}
                       required
-                      className="border-gray-200 focus:border-emerald-300 focus:ring-emerald-200"
+                      className="border-gray-200 focus:border-emerald-300 focus:ring-emerald-200 flex flex-col"
                     />
                   </div>
                 </div>
