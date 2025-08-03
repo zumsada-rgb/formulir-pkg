@@ -297,18 +297,15 @@ export default function HealthExaminationForm() {
                     <Label htmlFor="tanggalLahir" className="text-sm font-medium text-gray-600">
                       Tanggal Lahir (DD/MM/YYYY) *
                     </Label>
-                    <div className="relative">
-                      <Input
-                        id="tanggalLahir"
-                        name="tanggalLahir"
-                        type="date"
-                        value={formData.tanggalLahir}
-                        onChange={handleInputChange}
-                        required
-                        className="border-gray-200 focus:border-emerald-300 focus:ring-emerald-200 pr-10"
-                      />
-                      <Calendar className="absolute right-2 top-1/2 transform -translate-y-1/2 w-4 h-4 text-emerald-500 pointer-events-none z-10" />
-                    </div>
+                    <Input
+                      id="tanggalLahir"
+                      name="tanggalLahir"
+                      type="date"
+                      value={formData.tanggalLahir}
+                      onChange={handleInputChange}
+                      required
+                      className="border-gray-200 focus:border-emerald-300 focus:ring-emerald-200"
+                    />
                   </div>
                 </div>
 
