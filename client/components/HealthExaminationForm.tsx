@@ -349,13 +349,13 @@ export default function HealthExaminationForm() {
                   </Label>
                 </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-4">
                   <div className="space-y-2">
                     <Label
                       htmlFor="tempatLahir"
                       className="text-sm font-medium text-gray-600"
                     >
-                      Tempat Lahir *
+                      Tempat *
                     </Label>
                     <Input
                       id="tempatLahir"
@@ -373,7 +373,7 @@ export default function HealthExaminationForm() {
                       htmlFor="tanggalLahir"
                       className="text-sm font-medium text-gray-600"
                     >
-                      Tanggal Lahir (DD/MM/YYYY) *
+                      Tanggal Lahir *
                     </Label>
                     <Input
                       id="tanggalLahir"
@@ -388,9 +388,9 @@ export default function HealthExaminationForm() {
                 </div>
 
                 {/* Preview - Always visible and below inputs */}
-                <div className="bg-emerald-50 border border-emerald-200 rounded-md p-3">
-                  <p className="text-sm text-emerald-700 font-medium">
-                    Pratinjau TTL:
+                <div className="bg-emerald-50 border border-emerald-200 rounded-md p-4 text-center">
+                  <p className="text-sm text-emerald-700 font-medium mb-2">
+                    Pratinjau TTL
                   </p>
                   <p className="text-emerald-800 font-semibold">
                     {formatTTLPreview()}
