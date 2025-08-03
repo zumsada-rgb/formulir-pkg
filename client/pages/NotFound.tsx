@@ -1,6 +1,12 @@
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { Home, Stethoscope } from "lucide-react";
 
 export default function NotFound() {
@@ -18,7 +24,8 @@ export default function NotFound() {
         </CardHeader>
         <CardContent className="text-center">
           <p className="text-sm text-gray-600 mb-6">
-            Halaman yang Anda cari tidak tersedia. Silakan kembali ke formulir pendaftaran.
+            Halaman yang Anda cari tidak tersedia. Silakan kembali ke formulir
+            pendaftaran.
           </p>
           <Button asChild className="w-full">
             <Link to="/" className="flex items-center gap-2">

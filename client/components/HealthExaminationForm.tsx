@@ -3,9 +3,34 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue, SelectGroup, SelectLabel } from "@/components/ui/select";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Stethoscope, Heart, UserCheck, Calendar, MapPin, Mail, Phone, IdCard, GraduationCap, Building } from "lucide-react";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+  SelectGroup,
+  SelectLabel,
+} from "@/components/ui/select";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import {
+  Stethoscope,
+  Heart,
+  UserCheck,
+  Calendar,
+  MapPin,
+  Mail,
+  Phone,
+  IdCard,
+  GraduationCap,
+  Building,
+} from "lucide-react";
 
 interface FormData {
   nama: string;
@@ -22,14 +47,27 @@ interface FormData {
 
 const kelasOptions = [
   { group: "Kelas X", items: ["X-1", "X-2", "X-3", "X-4", "X-5", "X-6"] },
-  { group: "Kelas XI", items: ["XI-1", "XI-2", "XI-3", "XI-4", "XI-5", "XI-6"] }
+  {
+    group: "Kelas XI",
+    items: ["XI-1", "XI-2", "XI-3", "XI-4", "XI-5", "XI-6"],
+  },
 ];
 
 const jurusanOptions = ["TKR", "TSM", "DKV", "TKJ", "BISDIG", "DPB"];
 
 const monthNames = [
-  "Januari", "Februari", "Maret", "April", "Mei", "Juni",
-  "Juli", "Agustus", "September", "Oktober", "November", "Desember"
+  "Januari",
+  "Februari",
+  "Maret",
+  "April",
+  "Mei",
+  "Juni",
+  "Juli",
+  "Agustus",
+  "September",
+  "Oktober",
+  "November",
+  "Desember",
 ];
 
 export default function HealthExaminationForm() {
@@ -49,37 +87,39 @@ export default function HealthExaminationForm() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+  const handleInputChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+  ) => {
     const { name, value } = e.target;
-    setFormData(prev => ({ ...prev, [name]: value }));
+    setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
   const handleSelectChange = (name: string, value: string) => {
-    setFormData(prev => ({ ...prev, [name]: value }));
+    setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
   const formatTTLPreview = () => {
     if (!formData.tempatLahir && !formData.tanggalLahir) return "";
-    
+
     let preview = formData.tempatLahir || "[Tempat]";
-    
+
     if (formData.tanggalLahir) {
       const date = new Date(formData.tanggalLahir);
-      const day = date.getDate().toString().padStart(2, '0');
+      const day = date.getDate().toString().padStart(2, "0");
       const month = monthNames[date.getMonth()];
       const year = date.getFullYear();
       preview += `, ${day} ${month} ${year}`;
     } else {
       preview += ", [DD/MM/YYYY]";
     }
-    
+
     return preview;
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
-    
+
     // Simulate form submission
     setTimeout(() => {
       setIsSubmitting(false);
@@ -112,14 +152,18 @@ export default function HealthExaminationForm() {
             <div className="mx-auto w-16 h-16 bg-emerald-100 rounded-full flex items-center justify-center mb-4">
               <UserCheck className="w-8 h-8 text-emerald-600" />
             </div>
-            <CardTitle className="text-2xl text-emerald-800">Pendaftaran Berhasil!</CardTitle>
+            <CardTitle className="text-2xl text-emerald-800">
+              Pendaftaran Berhasil!
+            </CardTitle>
             <CardDescription className="text-emerald-600">
-              Data Anda telah berhasil didaftarkan untuk Pemeriksaan Kesehatan Gratis
+              Data Anda telah berhasil didaftarkan untuk Pemeriksaan Kesehatan
+              Gratis
             </CardDescription>
           </CardHeader>
           <CardContent className="text-center">
             <p className="text-sm text-gray-600 mb-6">
-              Tim medis akan menghubungi Anda sesuai jadwal yang telah ditentukan.
+              Tim medis akan menghubungi Anda sesuai jadwal yang telah
+              ditentukan.
             </p>
             <Button onClick={resetForm} className="w-full">
               Daftar Peserta Lain
@@ -148,7 +192,8 @@ export default function HealthExaminationForm() {
             Formulir Pendataan Peserta PKG
           </p>
           <p className="text-gray-600 mt-2 max-w-2xl mx-auto">
-            Silakan lengkapi data diri Anda dengan benar untuk mendapatkan layanan pemeriksaan kesehatan gratis
+            Silakan lengkapi data diri Anda dengan benar untuk mendapatkan
+            layanan pemeriksaan kesehatan gratis
           </p>
         </div>
 
@@ -160,14 +205,18 @@ export default function HealthExaminationForm() {
               Data Pribadi Peserta
             </CardTitle>
             <CardDescription>
-              Pastikan semua informasi yang diisi sudah benar dan sesuai dengan dokumen resmi
+              Pastikan semua informasi yang diisi sudah benar dan sesuai dengan
+              dokumen resmi
             </CardDescription>
           </CardHeader>
           <CardContent>
             <form onSubmit={handleSubmit} className="space-y-6">
               {/* Row 1: Nama */}
               <div className="space-y-2">
-                <Label htmlFor="nama" className="text-sm font-semibold text-gray-700 flex items-center gap-2">
+                <Label
+                  htmlFor="nama"
+                  className="text-sm font-semibold text-gray-700 flex items-center gap-2"
+                >
                   <UserCheck className="w-4 h-4 text-emerald-600" />
                   Nama Lengkap *
                 </Label>
@@ -186,11 +235,19 @@ export default function HealthExaminationForm() {
               {/* Row 2: Kelas/Ruang, Jurusan */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div className="space-y-2">
-                  <Label htmlFor="kelasRuang" className="text-sm font-semibold text-gray-700 flex items-center gap-2">
+                  <Label
+                    htmlFor="kelasRuang"
+                    className="text-sm font-semibold text-gray-700 flex items-center gap-2"
+                  >
                     <Building className="w-4 h-4 text-emerald-600" />
                     Kelas/Ruang *
                   </Label>
-                  <Select value={formData.kelasRuang} onValueChange={(value) => handleSelectChange("kelasRuang", value)}>
+                  <Select
+                    value={formData.kelasRuang}
+                    onValueChange={(value) =>
+                      handleSelectChange("kelasRuang", value)
+                    }
+                  >
                     <SelectTrigger className="border-gray-200 focus:border-emerald-300 focus:ring-emerald-200">
                       <SelectValue placeholder="Pilih kelas/ruang" />
                     </SelectTrigger>
@@ -209,11 +266,19 @@ export default function HealthExaminationForm() {
                   </Select>
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="jurusan" className="text-sm font-semibold text-gray-700 flex items-center gap-2">
+                  <Label
+                    htmlFor="jurusan"
+                    className="text-sm font-semibold text-gray-700 flex items-center gap-2"
+                  >
                     <GraduationCap className="w-4 h-4 text-emerald-600" />
                     Jurusan *
                   </Label>
-                  <Select value={formData.jurusan} onValueChange={(value) => handleSelectChange("jurusan", value)}>
+                  <Select
+                    value={formData.jurusan}
+                    onValueChange={(value) =>
+                      handleSelectChange("jurusan", value)
+                    }
+                  >
                     <SelectTrigger className="border-gray-200 focus:border-emerald-300 focus:ring-emerald-200">
                       <SelectValue placeholder="Pilih jurusan" />
                     </SelectTrigger>
@@ -231,7 +296,10 @@ export default function HealthExaminationForm() {
               {/* Row 3: NIK, NISN */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div className="space-y-2">
-                  <Label htmlFor="nik" className="text-sm font-semibold text-gray-700 flex items-center gap-2">
+                  <Label
+                    htmlFor="nik"
+                    className="text-sm font-semibold text-gray-700 flex items-center gap-2"
+                  >
                     <IdCard className="w-4 h-4 text-emerald-600" />
                     NIK *
                   </Label>
@@ -251,7 +319,10 @@ export default function HealthExaminationForm() {
                   />
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="nisn" className="text-sm font-semibold text-gray-700 flex items-center gap-2">
+                  <Label
+                    htmlFor="nisn"
+                    className="text-sm font-semibold text-gray-700 flex items-center gap-2"
+                  >
                     <IdCard className="w-4 h-4 text-emerald-600" />
                     NISN *
                   </Label>
@@ -283,7 +354,10 @@ export default function HealthExaminationForm() {
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div className="space-y-2">
-                    <Label htmlFor="tempatLahir" className="text-sm font-medium text-gray-600">
+                    <Label
+                      htmlFor="tempatLahir"
+                      className="text-sm font-medium text-gray-600"
+                    >
                       Tempat Lahir *
                     </Label>
                     <Input
@@ -298,7 +372,10 @@ export default function HealthExaminationForm() {
                     />
                   </div>
                   <div className="space-y-2 flex flex-col">
-                    <Label htmlFor="tanggalLahir" className="text-sm font-medium text-gray-600">
+                    <Label
+                      htmlFor="tanggalLahir"
+                      className="text-sm font-medium text-gray-600"
+                    >
                       Tanggal Lahir (DD/MM/YYYY) *
                     </Label>
                     <Input
@@ -315,14 +392,21 @@ export default function HealthExaminationForm() {
 
                 {/* Preview - Always visible and below inputs */}
                 <div className="bg-emerald-50 border border-emerald-200 rounded-md p-3">
-                  <p className="text-sm text-emerald-700 font-medium">Pratinjau TTL:</p>
-                  <p className="text-emerald-800 font-semibold">{formatTTLPreview()}</p>
+                  <p className="text-sm text-emerald-700 font-medium">
+                    Pratinjau TTL:
+                  </p>
+                  <p className="text-emerald-800 font-semibold">
+                    {formatTTLPreview()}
+                  </p>
                 </div>
               </div>
 
               {/* Row 5: Email */}
               <div className="space-y-2">
-                <Label htmlFor="email" className="text-sm font-semibold text-gray-700 flex items-center gap-2">
+                <Label
+                  htmlFor="email"
+                  className="text-sm font-semibold text-gray-700 flex items-center gap-2"
+                >
                   <Mail className="w-4 h-4 text-emerald-600" />
                   Email *
                 </Label>
@@ -340,7 +424,10 @@ export default function HealthExaminationForm() {
 
               {/* Row 6: Nomor HP */}
               <div className="space-y-2">
-                <Label htmlFor="nomorHp" className="text-sm font-semibold text-gray-700 flex items-center gap-2">
+                <Label
+                  htmlFor="nomorHp"
+                  className="text-sm font-semibold text-gray-700 flex items-center gap-2"
+                >
                   <Phone className="w-4 h-4 text-emerald-600" />
                   Nomor HP *
                 </Label>
@@ -360,7 +447,10 @@ export default function HealthExaminationForm() {
 
               {/* Row 7: Alamat Lengkap */}
               <div className="space-y-2">
-                <Label htmlFor="alamat" className="text-sm font-semibold text-gray-700 flex items-center gap-2">
+                <Label
+                  htmlFor="alamat"
+                  className="text-sm font-semibold text-gray-700 flex items-center gap-2"
+                >
                   <MapPin className="w-4 h-4 text-emerald-600" />
                   Alamat Lengkap *
                 </Label>
