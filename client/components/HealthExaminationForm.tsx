@@ -258,13 +258,15 @@ export default function HealthExaminationForm() {
                   <Input
                     id="nisn"
                     name="nisn"
-                    type="text"
+                    type="number"
+                    inputMode="numeric"
                     placeholder="10 digit NISN"
                     value={formData.nisn}
                     onChange={handleInputChange}
                     required
                     maxLength={10}
                     pattern="[0-9]{10}"
+                    min="0"
                     className="border-gray-200 focus:border-emerald-300 focus:ring-emerald-200"
                   />
                 </div>
