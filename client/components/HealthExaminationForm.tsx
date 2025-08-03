@@ -137,9 +137,8 @@ export default function HealthExaminationForm() {
     setIsSubmitting(true);
 
     try {
-      // 🚨 GANTI URL INI DENGAN URL DEPLOYMENT ANDA! 🚨
-      // Setelah deploy Google Apps Script, copy URL dan paste di sini
-      const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/YOUR_DEPLOYMENT_ID/exec';
+      // ✅ Google Apps Script Deployment URL - TERHUBUNG KE SPREADSHEET
+      const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzb93hrh9zWvm18ik5Y7wVY0I9iAxrHUsTJak3jWfHGaeD-6rA0Vf-DqFwSkcoDZhAf/exec';
 
       const response = await fetch(GOOGLE_SCRIPT_URL, {
         method: 'POST',
