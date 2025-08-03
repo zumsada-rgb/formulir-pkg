@@ -3,8 +3,8 @@ function doPost(e) {
     // Parse data dari form
     const data = JSON.parse(e.postData.contents);
     
-    // ID Spreadsheet "Formulir PKG" Anda (GANTI INI!)
-    const SHEET_ID = 'PASTE_ID_SPREADSHEET_ANDA_DI_SINI';
+    // ID Spreadsheet "Formulir PKG" Anda
+    const SHEET_ID = '1tRqTLDZA3iJ0WGPZaqixdO-onqE_vgBIbKlFOoDOTRs';
     const sheet = SpreadsheetApp.openById(SHEET_ID).getActiveSheet();
     
     // Setup header kolom - TEMPAT DAN TANGGAL LAHIR JADI SATU KOLOM
