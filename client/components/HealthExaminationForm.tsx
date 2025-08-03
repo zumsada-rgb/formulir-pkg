@@ -136,12 +136,31 @@ export default function HealthExaminationForm() {
     e.preventDefault();
     setIsSubmitting(true);
 
-    // Simulate form submission
-    setTimeout(() => {
+    try {
+      // URL Google Apps Script Web App (ganti dengan URL Anda)
+      const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/YOUR_SCRIPT_ID/exec';
+
+      const response = await fetch(GOOGLE_SCRIPT_URL, {
+        method: 'POST',
+        mode: 'no-cors', // Important untuk Google Apps Script
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData)
+      });
+
+      // Karena mode 'no-cors', kita tidak bisa baca response
+      // Jadi kita asumsikan berhasil jika tidak ada error
       setIsSubmitting(false);
       setSubmitted(true);
       console.log("Form submitted:", formData);
-    }, 1500);
+
+    } catch (error) {
+      console.error('Error submitting form:', error);
+      setIsSubmitting(false);
+      // Bisa tambahkan error handling di sini
+      alert('Terjadi kesalahan saat mengirim data. Silakan coba lagi.');
+    }
   };
 
   const resetForm = () => {
