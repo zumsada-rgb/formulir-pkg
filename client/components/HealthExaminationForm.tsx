@@ -305,9 +305,9 @@ export default function HealthExaminationForm() {
                         value={formData.tanggalLahir}
                         onChange={handleInputChange}
                         required
-                        className="border-gray-200 focus:border-emerald-300 focus:ring-emerald-200 pr-10"
+                        className="border-gray-200 focus:border-emerald-300 focus:ring-emerald-200 pr-12"
                       />
-                      <Calendar className="absolute right-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400 pointer-events-none" />
+                      <Calendar className="absolute right-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-emerald-500 pointer-events-none z-10" />
                     </div>
                   </div>
                 </div>
