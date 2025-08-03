@@ -258,28 +258,16 @@ export default function HealthExaminationForm() {
                     <Building className="w-4 h-4 text-emerald-600" />
                     Kelas/Ruang *
                   </Label>
-                  <Select
+                  <ComboboxGroup
+                    groups={kelasOptions}
                     value={formData.kelasRuang}
                     onValueChange={(value) =>
                       handleSelectChange("kelasRuang", value)
                     }
-                  >
-                    <SelectTrigger className="border-gray-200 focus:border-emerald-300 focus:ring-emerald-200">
-                      <SelectValue placeholder="Pilih kelas/ruang" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {kelasOptions.map((group) => (
-                        <SelectGroup key={group.group}>
-                          <SelectLabel>{group.group}</SelectLabel>
-                          {group.items.map((item) => (
-                            <SelectItem key={item} value={item}>
-                              {item}
-                            </SelectItem>
-                          ))}
-                        </SelectGroup>
-                      ))}
-                    </SelectContent>
-                  </Select>
+                    placeholder="Pilih kelas/ruang"
+                    emptyText="Kelas tidak ditemukan"
+                    maxVisibleItems={6}
+                  />
                 </div>
                 <div className="space-y-2">
                   <Label
