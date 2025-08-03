@@ -60,8 +60,8 @@ const kelasOptions = [
       { value: "X-3", label: "X-3" },
       { value: "X-4", label: "X-4" },
       { value: "X-5", label: "X-5" },
-      { value: "X-6", label: "X-6" }
-    ]
+      { value: "X-6", label: "X-6" },
+    ],
   },
   {
     label: "Kelas XI",
@@ -71,8 +71,8 @@ const kelasOptions = [
       { value: "XI-3", label: "XI-3" },
       { value: "XI-4", label: "XI-4" },
       { value: "XI-5", label: "XI-5" },
-      { value: "XI-6", label: "XI-6" }
-    ]
+      { value: "XI-6", label: "XI-6" },
+    ],
   },
 ];
 
@@ -82,7 +82,7 @@ const jurusanOptions = [
   { value: "DKV", label: "DKV" },
   { value: "TKJ", label: "TKJ" },
   { value: "BISDIG", label: "BISDIG" },
-  { value: "DPB", label: "DPB" }
+  { value: "DPB", label: "DPB" },
 ];
 
 const monthNames = [
@@ -120,9 +120,10 @@ export default function HealthExaminationForm() {
 
   // Fungsi untuk capitalize
   const capitalize = (str: string) => {
-    return str.split(' ').map(word =>
-      word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()
-    ).join(' ');
+    return str
+      .split(" ")
+      .map((word) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
+      .join(" ");
   };
 
   const handleInputChange = (
@@ -132,7 +133,7 @@ export default function HealthExaminationForm() {
     let processedValue = value;
 
     // Auto capitalize untuk nama dan tempat lahir
-    if (name === 'nama' || name === 'tempatLahir') {
+    if (name === "nama" || name === "tempatLahir") {
       processedValue = capitalize(value);
     }
 
@@ -140,7 +141,7 @@ export default function HealthExaminationForm() {
 
     // Clear error ketika user mulai mengetik
     if (errors[name as keyof FormErrors]) {
-      setErrors(prev => ({ ...prev, [name]: undefined }));
+      setErrors((prev) => ({ ...prev, [name]: undefined }));
     }
   };
 
@@ -149,66 +150,69 @@ export default function HealthExaminationForm() {
 
     // Clear error ketika user memilih
     if (errors[name as keyof FormErrors]) {
-      setErrors(prev => ({ ...prev, [name]: undefined }));
+      setErrors((prev) => ({ ...prev, [name]: undefined }));
     }
   };
 
   // Validasi real-time dengan kriteria yang lebih spesifik
   const validateField = (name: string, value: string): string | undefined => {
     switch (name) {
-      case 'nama':
-        if (!value.trim()) return 'Nama Lengkap wajib diisi';
-        if (value.trim().length < 3) return 'Nama Lengkap minimal 3 karakter';
+      case "nama":
+        if (!value.trim()) return "Nama Lengkap wajib diisi";
+        if (value.trim().length < 3) return "Nama Lengkap minimal 3 karakter";
         break;
-      case 'nik':
-        if (!value) return 'NIK wajib diisi';
-        if (value.length !== 16) return 'NIK harus 16 digit';
+      case "nik":
+        if (!value) return "NIK wajib diisi";
+        if (value.length !== 16) return "NIK harus 16 digit";
         break;
-      case 'nisn':
-        if (!value) return 'NISN wajib diisi';
-        if (value.length !== 10) return 'NISN harus 10 digit';
+      case "nisn":
+        if (!value) return "NISN wajib diisi";
+        if (value.length !== 10) return "NISN harus 10 digit";
         break;
-      case 'email':
-        if (!value.trim()) return 'Email wajib diisi';
+      case "email":
+        if (!value.trim()) return "Email wajib diisi";
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        if (!emailRegex.test(value)) return 'Format email tidak valid';
+        if (!emailRegex.test(value)) return "Format email tidak valid";
         break;
-      case 'nomorHp':
-        if (!value.trim()) return 'Nomor HP wajib diisi';
-        if (value.trim().length < 11) return 'Nomor HP minimal 11 digit';
+      case "nomorHp":
+        if (!value.trim()) return "Nomor HP wajib diisi";
+        if (value.trim().length < 11) return "Nomor HP minimal 11 digit";
         break;
-      case 'tempatLahir':
-        if (!value.trim()) return 'Tempat Lahir wajib diisi';
+      case "tempatLahir":
+        if (!value.trim()) return "Tempat Lahir wajib diisi";
         break;
-      case 'tanggalLahir':
-        if (!value) return 'Tanggal Lahir wajib diisi';
+      case "tanggalLahir":
+        if (!value) return "Tanggal Lahir wajib diisi";
         break;
-      case 'alamat':
-        if (!value.trim()) return 'Alamat Lengkap wajib diisi';
-        if (value.trim().length < 10) return 'Alamat Lengkap minimal 10 karakter';
+      case "alamat":
+        if (!value.trim()) return "Alamat Lengkap wajib diisi";
+        if (value.trim().length < 10)
+          return "Alamat Lengkap minimal 10 karakter";
         break;
-      case 'kelasRuang':
-        if (!value) return 'Kelas/Ruang wajib dipilih';
+      case "kelasRuang":
+        if (!value) return "Kelas/Ruang wajib dipilih";
         break;
-      case 'jurusan':
-        if (!value) return 'Jurusan wajib dipilih';
+      case "jurusan":
+        if (!value) return "Jurusan wajib dipilih";
         break;
     }
     return undefined;
   };
 
   // Handler untuk blur validation
-  const handleBlur = (e: React.FocusEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+  const handleBlur = (
+    e: React.FocusEvent<HTMLInputElement | HTMLTextAreaElement>,
+  ) => {
     const { name, value } = e.target;
     const error = validateField(name, value);
-    setErrors(prev => ({ ...prev, [name]: error }));
+    setErrors((prev) => ({ ...prev, [name]: error }));
   };
 
   // Validasi semua field
   const validateForm = (): boolean => {
     const newErrors: FormErrors = {};
 
-    Object.keys(formData).forEach(key => {
+    Object.keys(formData).forEach((key) => {
       const error = validateField(key, formData[key as keyof FormData]);
       if (error) {
         newErrors[key as keyof FormErrors] = error;
@@ -249,15 +253,16 @@ export default function HealthExaminationForm() {
 
     try {
       // ✅ Google Apps Script Deployment URL - TERHUBUNG KE SPREADSHEET
-      const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzb93hrh9zWvm18ik5Y7wVY0I9iAxrHUsTJak3jWfHGaeD-6rA0Vf-DqFwSkcoDZhAf/exec';
+      const GOOGLE_SCRIPT_URL =
+        "https://script.google.com/macros/s/AKfycbzb93hrh9zWvm18ik5Y7wVY0I9iAxrHUsTJak3jWfHGaeD-6rA0Vf-DqFwSkcoDZhAf/exec";
 
       const response = await fetch(GOOGLE_SCRIPT_URL, {
-        method: 'POST',
-        mode: 'no-cors', // Important untuk Google Apps Script
+        method: "POST",
+        mode: "no-cors", // Important untuk Google Apps Script
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
-        body: JSON.stringify(formData)
+        body: JSON.stringify(formData),
       });
 
       // Karena mode 'no-cors', kita tidak bisa baca response
@@ -265,11 +270,10 @@ export default function HealthExaminationForm() {
       setIsSubmitting(false);
       setSubmitted(true);
       console.log("Form submitted:", formData);
-
     } catch (error) {
-      console.error('Error submitting form:', error);
+      console.error("Error submitting form:", error);
       setIsSubmitting(false);
-      alert('Terjadi kesalahan saat mengirim data. Silakan coba lagi.');
+      alert("Terjadi kesalahan saat mengirim data. Silakan coba lagi.");
     }
   };
 
@@ -376,7 +380,9 @@ export default function HealthExaminationForm() {
                   onBlur={handleBlur}
                   required
                   className={`border-gray-200 focus:border-emerald-300 focus:ring-emerald-200 ${
-                    errors.nama ? 'border-red-300 focus:border-red-300 focus:ring-red-200' : ''
+                    errors.nama
+                      ? "border-red-300 focus:border-red-300 focus:ring-red-200"
+                      : ""
                   }`}
                 />
                 {errors.nama && (
@@ -403,10 +409,12 @@ export default function HealthExaminationForm() {
                     placeholder="Pilih kelas/ruang"
                     emptyText="Kelas tidak ditemukan"
                     maxVisibleItems={6}
-                    className={errors.kelasRuang ? 'border-red-300' : ''}
+                    className={errors.kelasRuang ? "border-red-300" : ""}
                   />
                   {errors.kelasRuang && (
-                    <p className="text-red-500 text-xs mt-1">{errors.kelasRuang}</p>
+                    <p className="text-red-500 text-xs mt-1">
+                      {errors.kelasRuang}
+                    </p>
                   )}
                 </div>
                 <div className="space-y-2">
@@ -426,10 +434,12 @@ export default function HealthExaminationForm() {
                     placeholder="Pilih jurusan"
                     emptyText="Jurusan tidak ditemukan"
                     maxVisibleItems={6}
-                    className={errors.jurusan ? 'border-red-300' : ''}
+                    className={errors.jurusan ? "border-red-300" : ""}
                   />
                   {errors.jurusan && (
-                    <p className="text-red-500 text-xs mt-1">{errors.jurusan}</p>
+                    <p className="text-red-500 text-xs mt-1">
+                      {errors.jurusan}
+                    </p>
                   )}
                 </div>
               </div>
@@ -450,17 +460,19 @@ export default function HealthExaminationForm() {
                     placeholder="16 digit NIK"
                     value={formData.nik}
                     onAccept={(value: string) => {
-                      setFormData(prev => ({ ...prev, nik: value }));
+                      setFormData((prev) => ({ ...prev, nik: value }));
                       if (errors.nik && value.length === 16) {
-                        setErrors(prev => ({ ...prev, nik: undefined }));
+                        setErrors((prev) => ({ ...prev, nik: undefined }));
                       }
                     }}
                     onBlur={() => {
-                      const error = validateField('nik', formData.nik);
-                      setErrors(prev => ({ ...prev, nik: error }));
+                      const error = validateField("nik", formData.nik);
+                      setErrors((prev) => ({ ...prev, nik: error }));
                     }}
                     className={`flex h-10 w-full rounded-md border bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 border-gray-200 focus:border-emerald-300 focus:ring-emerald-200 ${
-                      errors.nik ? 'border-red-300 focus:border-red-300 focus:ring-red-200' : ''
+                      errors.nik
+                        ? "border-red-300 focus:border-red-300 focus:ring-red-200"
+                        : ""
                     }`}
                   />
                   {errors.nik && (
@@ -481,17 +493,19 @@ export default function HealthExaminationForm() {
                     placeholder="10 digit NISN"
                     value={formData.nisn}
                     onAccept={(value: string) => {
-                      setFormData(prev => ({ ...prev, nisn: value }));
+                      setFormData((prev) => ({ ...prev, nisn: value }));
                       if (errors.nisn && value.length === 10) {
-                        setErrors(prev => ({ ...prev, nisn: undefined }));
+                        setErrors((prev) => ({ ...prev, nisn: undefined }));
                       }
                     }}
                     onBlur={() => {
-                      const error = validateField('nisn', formData.nisn);
-                      setErrors(prev => ({ ...prev, nisn: error }));
+                      const error = validateField("nisn", formData.nisn);
+                      setErrors((prev) => ({ ...prev, nisn: error }));
                     }}
                     className={`flex h-10 w-full rounded-md border bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 border-gray-200 focus:border-emerald-300 focus:ring-emerald-200 ${
-                      errors.nisn ? 'border-red-300 focus:border-red-300 focus:ring-red-200' : ''
+                      errors.nisn
+                        ? "border-red-300 focus:border-red-300 focus:ring-red-200"
+                        : ""
                     }`}
                   />
                   {errors.nisn && (
@@ -527,11 +541,15 @@ export default function HealthExaminationForm() {
                       onBlur={handleBlur}
                       required
                       className={`border-gray-200 focus:border-emerald-300 focus:ring-emerald-200 ${
-                        errors.tempatLahir ? 'border-red-300 focus:border-red-300 focus:ring-red-200' : ''
+                        errors.tempatLahir
+                          ? "border-red-300 focus:border-red-300 focus:ring-red-200"
+                          : ""
                       }`}
                     />
                     {errors.tempatLahir && (
-                      <p className="text-red-500 text-xs mt-1">{errors.tempatLahir}</p>
+                      <p className="text-red-500 text-xs mt-1">
+                        {errors.tempatLahir}
+                      </p>
                     )}
                   </div>
                   <div className="space-y-2 flex flex-col">
@@ -550,11 +568,15 @@ export default function HealthExaminationForm() {
                       onBlur={handleBlur}
                       required
                       className={`border-gray-200 focus:border-emerald-300 focus:ring-emerald-200 flex flex-col ${
-                        errors.tanggalLahir ? 'border-red-300 focus:border-red-300 focus:ring-red-200' : ''
+                        errors.tanggalLahir
+                          ? "border-red-300 focus:border-red-300 focus:ring-red-200"
+                          : ""
                       }`}
                     />
                     {errors.tanggalLahir && (
-                      <p className="text-red-500 text-xs mt-1">{errors.tanggalLahir}</p>
+                      <p className="text-red-500 text-xs mt-1">
+                        {errors.tanggalLahir}
+                      </p>
                     )}
                   </div>
                 </div>
@@ -589,7 +611,9 @@ export default function HealthExaminationForm() {
                   onBlur={handleBlur}
                   required
                   className={`border-gray-200 focus:border-emerald-300 focus:ring-emerald-200 ${
-                    errors.email ? 'border-red-300 focus:border-red-300 focus:ring-red-200' : ''
+                    errors.email
+                      ? "border-red-300 focus:border-red-300 focus:ring-red-200"
+                      : ""
                   }`}
                 />
                 {errors.email && (
@@ -617,7 +641,9 @@ export default function HealthExaminationForm() {
                   onBlur={handleBlur}
                   required
                   className={`border-gray-200 focus:border-emerald-300 focus:ring-emerald-200 ${
-                    errors.nomorHp ? 'border-red-300 focus:border-red-300 focus:ring-red-200' : ''
+                    errors.nomorHp
+                      ? "border-red-300 focus:border-red-300 focus:ring-red-200"
+                      : ""
                   }`}
                 />
                 {errors.nomorHp && (
@@ -644,7 +670,9 @@ export default function HealthExaminationForm() {
                   required
                   rows={3}
                   className={`border-gray-200 focus:border-emerald-300 focus:ring-emerald-200 resize-none ${
-                    errors.alamat ? 'border-red-300 focus:border-red-300 focus:ring-red-200' : ''
+                    errors.alamat
+                      ? "border-red-300 focus:border-red-300 focus:ring-red-200"
+                      : ""
                   }`}
                 />
                 {errors.alamat && (

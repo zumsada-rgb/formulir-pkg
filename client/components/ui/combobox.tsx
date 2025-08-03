@@ -55,7 +55,7 @@ export function Combobox({
           aria-expanded={open}
           className={cn(
             "w-full justify-between border-gray-200 focus:border-emerald-300 focus:ring-emerald-200",
-            className
+            className,
           )}
           disabled={disabled}
         >
@@ -84,7 +84,7 @@ export function Combobox({
                   <Check
                     className={cn(
                       "mr-2 h-4 w-4",
-                      value === option.value ? "opacity-100" : "opacity-0"
+                      value === option.value ? "opacity-100" : "opacity-0",
                     )}
                   />
                   {option.label}
@@ -124,7 +124,7 @@ export function ComboboxGroup({
 }: ComboboxGroupProps) {
   const [open, setOpen] = React.useState(false);
 
-  const allOptions = groups.flatMap(group => group.options);
+  const allOptions = groups.flatMap((group) => group.options);
   const selectedOption = allOptions.find((option) => option.value === value);
 
   return (
@@ -136,7 +136,7 @@ export function ComboboxGroup({
           aria-expanded={open}
           className={cn(
             "w-full justify-between border-gray-200 focus:border-emerald-300 focus:ring-emerald-200",
-            className
+            className,
           )}
           disabled={disabled}
         >
@@ -159,14 +159,16 @@ export function ComboboxGroup({
                     key={option.value}
                     value={option.value}
                     onSelect={(currentValue) => {
-                      onValueChange?.(currentValue === value ? "" : currentValue);
+                      onValueChange?.(
+                        currentValue === value ? "" : currentValue,
+                      );
                       setOpen(false);
                     }}
                   >
                     <Check
                       className={cn(
                         "mr-2 h-4 w-4",
-                        value === option.value ? "opacity-100" : "opacity-0"
+                        value === option.value ? "opacity-100" : "opacity-0",
                       )}
                     />
                     {option.label}
