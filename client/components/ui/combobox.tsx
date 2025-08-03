@@ -148,11 +148,9 @@ export function ComboboxGroup({
         <Command>
           <CommandInput placeholder="Search..." />
           <CommandEmpty>{emptyText}</CommandEmpty>
-          <CommandList 
-            className={cn(
-              "max-h-fit overflow-y-auto",
-              maxVisibleItems && `max-h-[${maxVisibleItems * 40}px]`
-            )}
+          <CommandList
+            className="overflow-y-auto"
+            style={{ maxHeight: `${maxVisibleItems * 40}px` }}
           >
             {groups.map((group) => (
               <CommandGroup key={group.label} heading={group.label}>
