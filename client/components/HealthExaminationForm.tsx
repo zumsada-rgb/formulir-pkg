@@ -706,7 +706,7 @@ export default function HealthExaminationForm() {
         {/* Footer */}
         <div className="mt-8 text-center">
           <p className="text-sm text-gray-600">
-            Footer SAJA
+            © 2024 SMK NU 2 KEDUNGPRING
           </p>
         </div>
       </div>
