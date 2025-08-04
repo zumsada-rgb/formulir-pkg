@@ -259,7 +259,7 @@ export default function HealthExaminationForm() {
       // Tambahkan tanda kutip tunggal di depan nomor HP untuk menjaga angka 0
       const dataToSend = {
         ...formData,
-        nomorHp: `'${formData.nomorHp}` // Menambahkan ' di depan nomor HP
+        nomorHp: `'${formData.nomorHp}`, // Menambahkan ' di depan nomor HP
       };
 
       const response = await fetch(GOOGLE_SCRIPT_URL, {
