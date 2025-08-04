@@ -73,16 +73,25 @@ function doPost(e) {
       data.nama || "",
       data.kelasRuang || "",
       data.jurusan || "",
-      "'" + (data.nik || ""), // Prefix apostrophe untuk mempertahankan leading zero
-      "'" + (data.nisn || ""), // Prefix apostrophe untuk mempertahankan leading zero
+      data.nik || "",
+      data.nisn || "",
       formatTTL(data.tempatLahir, data.tanggalLahir), // TTL GABUNGAN
       data.email || "",
-      "'" + (data.nomorHp || ""), // Prefix apostrophe untuk mempertahankan leading zero
+      data.nomorHp || "",
       data.alamat || "",
     ];
 
-    // Tambahkan data ke baris baru
-    sheet.appendRow(rowData);
+    // Dapatkan baris baru untuk data
+    const newRow = sheet.getLastRow() + 1;
+
+    // Set data dengan format text untuk kolom yang perlu mempertahankan leading zero
+    const range = sheet.getRange(newRow, 1, 1, rowData.length);
+    range.setValues([rowData]);
+
+    // Format kolom NIK (kolom 5), NISN (kolom 6), dan Nomor HP (kolom 9) sebagai TEXT
+    sheet.getRange(newRow, 5).setNumberFormat("@"); // NIK
+    sheet.getRange(newRow, 6).setNumberFormat("@"); // NISN
+    sheet.getRange(newRow, 9).setNumberFormat("@"); // Nomor HP
 
     // Auto resize kolom agar rapi
     sheet.autoResizeColumns(1, headers.length);
