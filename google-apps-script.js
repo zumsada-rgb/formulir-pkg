@@ -31,6 +31,11 @@ function doPost(e) {
       headerRange.setFontColor("#ffffff");
       headerRange.setFontWeight("bold");
       headerRange.setHorizontalAlignment("center");
+
+      // Set format TEXT untuk kolom NIK, NISN, dan Nomor HP di seluruh kolom
+      sheet.getRange("E:E").setNumberFormat("@"); // Kolom NIK
+      sheet.getRange("F:F").setNumberFormat("@"); // Kolom NISN
+      sheet.getRange("I:I").setNumberFormat("@"); // Kolom Nomor HP
     }
 
     // Fungsi format TTL - SAMA SEPERTI DI FORM REACT
