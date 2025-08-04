@@ -703,13 +703,10 @@ export default function HealthExaminationForm() {
           </CardContent>
         </Card>
 
-        {/* Footer Info */}
+        {/* Footer */}
         <div className="mt-8 text-center">
           <p className="text-sm text-gray-600">
-            * Semua field wajib diisi. Data Anda akan dijaga kerahasiaannya
-          </p>
-          <p className="text-xs text-gray-500 mt-2">
-            Untuk informasi lebih lanjut, hubungi panitia penyelenggara
+            Footer SAJA
           </p>
         </div>
       </div>
