@@ -1,17 +1,10 @@
 import { useState } from "react";
+import { IMaskInput } from "react-imask";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-  SelectGroup,
-  SelectLabel,
-} from "@/components/ui/select";
+import { Combobox, ComboboxGroup } from "@/components/ui/combobox";
 import {
   Card,
   CardContent,
@@ -45,15 +38,52 @@ interface FormData {
   alamat: string;
 }
 
+interface FormErrors {
+  nama?: string;
+  kelasRuang?: string;
+  jurusan?: string;
+  nik?: string;
+  nisn?: string;
+  tempatLahir?: string;
+  tanggalLahir?: string;
+  email?: string;
+  nomorHp?: string;
+  alamat?: string;
+}
+
 const kelasOptions = [
-  { group: "Kelas X", items: ["X-1", "X-2", "X-3", "X-4", "X-5", "X-6"] },
   {
-    group: "Kelas XI",
-    items: ["XI-1", "XI-2", "XI-3", "XI-4", "XI-5", "XI-6"],
+    label: "Kelas X",
+    options: [
+      { value: "X-1", label: "X-1" },
+      { value: "X-2", label: "X-2" },
+      { value: "X-3", label: "X-3" },
+      { value: "X-4", label: "X-4" },
+      { value: "X-5", label: "X-5" },
+      { value: "X-6", label: "X-6" },
+    ],
+  },
+  {
+    label: "Kelas XI",
+    options: [
+      { value: "XI-1", label: "XI-1" },
+      { value: "XI-2", label: "XI-2" },
+      { value: "XI-3", label: "XI-3" },
+      { value: "XI-4", label: "XI-4" },
+      { value: "XI-5", label: "XI-5" },
+      { value: "XI-6", label: "XI-6" },
+    ],
   },
 ];
 
-const jurusanOptions = ["TKR", "TSM", "DKV", "TKJ", "BISDIG", "DPB"];
+const jurusanOptions = [
+  { value: "TKR", label: "TKR" },
+  { value: "TSM", label: "TSM" },
+  { value: "DKV", label: "DKV" },
+  { value: "TKJ", label: "TKJ" },
+  { value: "BISDIG", label: "BISDIG" },
+  { value: "DPB", label: "DPB" },
+];
 
 const monthNames = [
   "Januari",
@@ -86,16 +116,111 @@ export default function HealthExaminationForm() {
 
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
+  const [errors, setErrors] = useState<FormErrors>({});
+
+  // Fungsi untuk capitalize
+  const capitalize = (str: string) => {
+    return str
+      .split(" ")
+      .map((word) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
+      .join(" ");
+  };
 
   const handleInputChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
   ) => {
     const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
+    let processedValue = value;
+
+    // Auto capitalize untuk nama dan tempat lahir
+    if (name === "nama" || name === "tempatLahir") {
+      processedValue = capitalize(value);
+    }
+
+    setFormData((prev) => ({ ...prev, [name]: processedValue }));
+
+    // Clear error ketika user mulai mengetik
+    if (errors[name as keyof FormErrors]) {
+      setErrors((prev) => ({ ...prev, [name]: undefined }));
+    }
   };
 
   const handleSelectChange = (name: string, value: string) => {
     setFormData((prev) => ({ ...prev, [name]: value }));
+
+    // Clear error ketika user memilih
+    if (errors[name as keyof FormErrors]) {
+      setErrors((prev) => ({ ...prev, [name]: undefined }));
+    }
+  };
+
+  // Validasi real-time dengan kriteria yang lebih spesifik
+  const validateField = (name: string, value: string): string | undefined => {
+    switch (name) {
+      case "nama":
+        if (!value.trim()) return "Nama Lengkap wajib diisi";
+        if (value.trim().length < 3) return "Nama Lengkap minimal 3 karakter";
+        break;
+      case "nik":
+        if (!value) return "NIK wajib diisi";
+        if (value.length !== 16) return "NIK harus 16 digit";
+        break;
+      case "nisn":
+        if (!value) return "NISN wajib diisi";
+        if (value.length !== 10) return "NISN harus 10 digit";
+        break;
+      case "email":
+        if (!value.trim()) return "Email wajib diisi";
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(value)) return "Format email tidak valid";
+        break;
+      case "nomorHp":
+        if (!value.trim()) return "Nomor HP wajib diisi";
+        if (value.trim().length < 11) return "Nomor HP minimal 11 digit";
+        break;
+      case "tempatLahir":
+        if (!value.trim()) return "Tempat Lahir wajib diisi";
+        break;
+      case "tanggalLahir":
+        if (!value) return "Tanggal Lahir wajib diisi";
+        break;
+      case "alamat":
+        if (!value.trim()) return "Alamat Lengkap wajib diisi";
+        if (value.trim().length < 10)
+          return "Alamat Lengkap minimal 10 karakter";
+        break;
+      case "kelasRuang":
+        if (!value) return "Kelas/Ruang wajib dipilih";
+        break;
+      case "jurusan":
+        if (!value) return "Jurusan wajib dipilih";
+        break;
+    }
+    return undefined;
+  };
+
+  // Handler untuk blur validation
+  const handleBlur = (
+    e: React.FocusEvent<HTMLInputElement | HTMLTextAreaElement>,
+  ) => {
+    const { name, value } = e.target;
+    const error = validateField(name, value);
+    setErrors((prev) => ({ ...prev, [name]: error }));
+  };
+
+  // Validasi semua field
+  const validateForm = (): boolean => {
+    const newErrors: FormErrors = {};
+
+    Object.keys(formData).forEach((key) => {
+      const error = validateField(key, formData[key as keyof FormData]);
+      if (error) {
+        newErrors[key as keyof FormErrors] = error;
+      }
+    });
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
   };
 
   const formatTTLPreview = () => {
@@ -118,14 +243,38 @@ export default function HealthExaminationForm() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    // Validasi form sebelum submit
+    if (!validateForm()) {
+      return; // Stop jika ada error
+    }
+
     setIsSubmitting(true);
 
-    // Simulate form submission
-    setTimeout(() => {
+    try {
+      // ✅ Google Apps Script Deployment URL - TERHUBUNG KE SPREADSHEET
+      const GOOGLE_SCRIPT_URL =
+        "https://script.google.com/macros/s/AKfycbzb93hrh9zWvm18ik5Y7wVY0I9iAxrHUsTJak3jWfHGaeD-6rA0Vf-DqFwSkcoDZhAf/exec";
+
+      const response = await fetch(GOOGLE_SCRIPT_URL, {
+        method: "POST",
+        mode: "no-cors", // Important untuk Google Apps Script
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formData),
+      });
+
+      // Karena mode 'no-cors', kita tidak bisa baca response
+      // Jadi kita asumsikan berhasil jika tidak ada error
       setIsSubmitting(false);
       setSubmitted(true);
       console.log("Form submitted:", formData);
-    }, 1500);
+    } catch (error) {
+      console.error("Error submitting form:", error);
+      setIsSubmitting(false);
+      alert("Terjadi kesalahan saat mengirim data. Silakan coba lagi.");
+    }
   };
 
   const resetForm = () => {
@@ -142,6 +291,7 @@ export default function HealthExaminationForm() {
       alamat: "",
     });
     setSubmitted(false);
+    setErrors({});
   };
 
   if (submitted) {
@@ -227,9 +377,17 @@ export default function HealthExaminationForm() {
                   placeholder="Masukkan nama lengkap"
                   value={formData.nama}
                   onChange={handleInputChange}
+                  onBlur={handleBlur}
                   required
-                  className="border-gray-200 focus:border-emerald-300 focus:ring-emerald-200"
+                  className={`border-gray-200 focus:border-emerald-300 focus:ring-emerald-200 ${
+                    errors.nama
+                      ? "border-red-300 focus:border-red-300 focus:ring-red-200"
+                      : ""
+                  }`}
                 />
+                {errors.nama && (
+                  <p className="text-red-500 text-xs mt-1">{errors.nama}</p>
+                )}
               </div>
 
               {/* Row 2: Kelas/Ruang, Jurusan */}
@@ -242,28 +400,22 @@ export default function HealthExaminationForm() {
                     <Building className="w-4 h-4 text-emerald-600" />
                     Kelas/Ruang *
                   </Label>
-                  <Select
+                  <ComboboxGroup
+                    groups={kelasOptions}
                     value={formData.kelasRuang}
                     onValueChange={(value) =>
                       handleSelectChange("kelasRuang", value)
                     }
-                  >
-                    <SelectTrigger className="border-gray-200 focus:border-emerald-300 focus:ring-emerald-200">
-                      <SelectValue placeholder="Pilih kelas/ruang" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {kelasOptions.map((group) => (
-                        <SelectGroup key={group.group}>
-                          <SelectLabel>{group.group}</SelectLabel>
-                          {group.items.map((item) => (
-                            <SelectItem key={item} value={item}>
-                              {item}
-                            </SelectItem>
-                          ))}
-                        </SelectGroup>
-                      ))}
-                    </SelectContent>
-                  </Select>
+                    placeholder="Pilih kelas/ruang"
+                    emptyText="Kelas tidak ditemukan"
+                    maxVisibleItems={6}
+                    className={errors.kelasRuang ? "border-red-300" : ""}
+                  />
+                  {errors.kelasRuang && (
+                    <p className="text-red-500 text-xs mt-1">
+                      {errors.kelasRuang}
+                    </p>
+                  )}
                 </div>
                 <div className="space-y-2">
                   <Label
@@ -273,23 +425,22 @@ export default function HealthExaminationForm() {
                     <GraduationCap className="w-4 h-4 text-emerald-600" />
                     Jurusan *
                   </Label>
-                  <Select
+                  <Combobox
+                    options={jurusanOptions}
                     value={formData.jurusan}
                     onValueChange={(value) =>
                       handleSelectChange("jurusan", value)
                     }
-                  >
-                    <SelectTrigger className="border-gray-200 focus:border-emerald-300 focus:ring-emerald-200">
-                      <SelectValue placeholder="Pilih jurusan" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {jurusanOptions.map((jurusan) => (
-                        <SelectItem key={jurusan} value={jurusan}>
-                          {jurusan}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
+                    placeholder="Pilih jurusan"
+                    emptyText="Jurusan tidak ditemukan"
+                    maxVisibleItems={6}
+                    className={errors.jurusan ? "border-red-300" : ""}
+                  />
+                  {errors.jurusan && (
+                    <p className="text-red-500 text-xs mt-1">
+                      {errors.jurusan}
+                    </p>
+                  )}
                 </div>
               </div>
 
@@ -303,20 +454,30 @@ export default function HealthExaminationForm() {
                     <IdCard className="w-4 h-4 text-emerald-600" />
                     NIK *
                   </Label>
-                  <Input
-                    id="nik"
-                    name="nik"
-                    type="number"
-                    inputMode="numeric"
+                  <IMaskInput
+                    mask="0000000000000000"
+                    lazy={true}
                     placeholder="16 digit NIK"
                     value={formData.nik}
-                    onChange={handleInputChange}
-                    required
-                    maxLength={16}
-                    pattern="[0-9]{16}"
-                    min="0"
-                    className="border-gray-200 focus:border-emerald-300 focus:ring-emerald-200"
+                    onAccept={(value: string) => {
+                      setFormData((prev) => ({ ...prev, nik: value }));
+                      if (errors.nik && value.length === 16) {
+                        setErrors((prev) => ({ ...prev, nik: undefined }));
+                      }
+                    }}
+                    onBlur={() => {
+                      const error = validateField("nik", formData.nik);
+                      setErrors((prev) => ({ ...prev, nik: error }));
+                    }}
+                    className={`flex h-10 w-full rounded-md border bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 border-gray-200 focus:border-emerald-300 focus:ring-emerald-200 ${
+                      errors.nik
+                        ? "border-red-300 focus:border-red-300 focus:ring-red-200"
+                        : ""
+                    }`}
                   />
+                  {errors.nik && (
+                    <p className="text-red-500 text-xs mt-1">{errors.nik}</p>
+                  )}
                 </div>
                 <div className="space-y-2">
                   <Label
@@ -326,20 +487,30 @@ export default function HealthExaminationForm() {
                     <IdCard className="w-4 h-4 text-emerald-600" />
                     NISN *
                   </Label>
-                  <Input
-                    id="nisn"
-                    name="nisn"
-                    type="number"
-                    inputMode="numeric"
+                  <IMaskInput
+                    mask="0000000000"
+                    lazy={true}
                     placeholder="10 digit NISN"
                     value={formData.nisn}
-                    onChange={handleInputChange}
-                    required
-                    maxLength={10}
-                    pattern="[0-9]{10}"
-                    min="0"
-                    className="border-gray-200 focus:border-emerald-300 focus:ring-emerald-200"
+                    onAccept={(value: string) => {
+                      setFormData((prev) => ({ ...prev, nisn: value }));
+                      if (errors.nisn && value.length === 10) {
+                        setErrors((prev) => ({ ...prev, nisn: undefined }));
+                      }
+                    }}
+                    onBlur={() => {
+                      const error = validateField("nisn", formData.nisn);
+                      setErrors((prev) => ({ ...prev, nisn: error }));
+                    }}
+                    className={`flex h-10 w-full rounded-md border bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 border-gray-200 focus:border-emerald-300 focus:ring-emerald-200 ${
+                      errors.nisn
+                        ? "border-red-300 focus:border-red-300 focus:ring-red-200"
+                        : ""
+                    }`}
                   />
+                  {errors.nisn && (
+                    <p className="text-red-500 text-xs mt-1">{errors.nisn}</p>
+                  )}
                 </div>
               </div>
 
@@ -352,7 +523,7 @@ export default function HealthExaminationForm() {
                   </Label>
                 </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-4">
                   <div className="space-y-2">
                     <Label
                       htmlFor="tempatLahir"
@@ -364,19 +535,29 @@ export default function HealthExaminationForm() {
                       id="tempatLahir"
                       name="tempatLahir"
                       type="text"
-                      placeholder="Kota tempat lahir"
+                      placeholder="Tempat Lahir"
                       value={formData.tempatLahir}
                       onChange={handleInputChange}
+                      onBlur={handleBlur}
                       required
-                      className="border-gray-200 focus:border-emerald-300 focus:ring-emerald-200"
+                      className={`border-gray-200 focus:border-emerald-300 focus:ring-emerald-200 ${
+                        errors.tempatLahir
+                          ? "border-red-300 focus:border-red-300 focus:ring-red-200"
+                          : ""
+                      }`}
                     />
+                    {errors.tempatLahir && (
+                      <p className="text-red-500 text-xs mt-1">
+                        {errors.tempatLahir}
+                      </p>
+                    )}
                   </div>
                   <div className="space-y-2 flex flex-col">
                     <Label
                       htmlFor="tanggalLahir"
                       className="text-sm font-medium text-gray-600"
                     >
-                      Tanggal Lahir (DD/MM/YYYY) *
+                      Tanggal Lahir *
                     </Label>
                     <Input
                       id="tanggalLahir"
@@ -384,16 +565,26 @@ export default function HealthExaminationForm() {
                       type="date"
                       value={formData.tanggalLahir}
                       onChange={handleInputChange}
+                      onBlur={handleBlur}
                       required
-                      className="border-gray-200 focus:border-emerald-300 focus:ring-emerald-200 flex flex-col"
+                      className={`border-gray-200 focus:border-emerald-300 focus:ring-emerald-200 flex flex-col ${
+                        errors.tanggalLahir
+                          ? "border-red-300 focus:border-red-300 focus:ring-red-200"
+                          : ""
+                      }`}
                     />
+                    {errors.tanggalLahir && (
+                      <p className="text-red-500 text-xs mt-1">
+                        {errors.tanggalLahir}
+                      </p>
+                    )}
                   </div>
                 </div>
 
                 {/* Preview - Always visible and below inputs */}
-                <div className="bg-emerald-50 border border-emerald-200 rounded-md p-3">
-                  <p className="text-sm text-emerald-700 font-medium">
-                    Pratinjau TTL:
+                <div className="bg-emerald-50 border border-emerald-200 rounded-md p-4 text-center">
+                  <p className="text-sm text-emerald-700 font-medium mb-2">
+                    Pratinjau TTL
                   </p>
                   <p className="text-emerald-800 font-semibold">
                     {formatTTLPreview()}
@@ -417,9 +608,17 @@ export default function HealthExaminationForm() {
                   placeholder="contoh@email.com"
                   value={formData.email}
                   onChange={handleInputChange}
+                  onBlur={handleBlur}
                   required
-                  className="border-gray-200 focus:border-emerald-300 focus:ring-emerald-200"
+                  className={`border-gray-200 focus:border-emerald-300 focus:ring-emerald-200 ${
+                    errors.email
+                      ? "border-red-300 focus:border-red-300 focus:ring-red-200"
+                      : ""
+                  }`}
                 />
+                {errors.email && (
+                  <p className="text-red-500 text-xs mt-1">{errors.email}</p>
+                )}
               </div>
 
               {/* Row 6: Nomor HP */}
@@ -439,10 +638,17 @@ export default function HealthExaminationForm() {
                   placeholder="08xxxxxxxxxx"
                   value={formData.nomorHp}
                   onChange={handleInputChange}
+                  onBlur={handleBlur}
                   required
-                  min="0"
-                  className="border-gray-200 focus:border-emerald-300 focus:ring-emerald-200"
+                  className={`border-gray-200 focus:border-emerald-300 focus:ring-emerald-200 ${
+                    errors.nomorHp
+                      ? "border-red-300 focus:border-red-300 focus:ring-red-200"
+                      : ""
+                  }`}
                 />
+                {errors.nomorHp && (
+                  <p className="text-red-500 text-xs mt-1">{errors.nomorHp}</p>
+                )}
               </div>
 
               {/* Row 7: Alamat Lengkap */}
@@ -460,10 +666,18 @@ export default function HealthExaminationForm() {
                   placeholder="Alamat lengkap tempat tinggal (jalan, RT/RW, kelurahan, kecamatan, kota/kabupaten, provinsi)"
                   value={formData.alamat}
                   onChange={handleInputChange}
+                  onBlur={handleBlur}
                   required
                   rows={3}
-                  className="border-gray-200 focus:border-emerald-300 focus:ring-emerald-200 resize-none"
+                  className={`border-gray-200 focus:border-emerald-300 focus:ring-emerald-200 resize-none ${
+                    errors.alamat
+                      ? "border-red-300 focus:border-red-300 focus:ring-red-200"
+                      : ""
+                  }`}
                 />
+                {errors.alamat && (
+                  <p className="text-red-500 text-xs mt-1">{errors.alamat}</p>
+                )}
               </div>
 
               {/* Submit Button */}
@@ -493,7 +707,7 @@ export default function HealthExaminationForm() {
         {/* Footer Info */}
         <div className="mt-8 text-center">
           <p className="text-sm text-gray-600">
-            * Semua field wajib diisi ��� Data Anda akan dijaga kerahasiaannya
+            * Semua field wajib diisi. Data Anda akan dijaga kerahasiaannya
           </p>
           <p className="text-xs text-gray-500 mt-2">
             Untuk informasi lebih lanjut, hubungi panitia penyelenggara
