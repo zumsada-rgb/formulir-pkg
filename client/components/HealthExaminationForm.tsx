@@ -341,12 +341,12 @@ export default function HealthExaminationForm() {
             </div>
             <Heart className="w-8 h-8 text-emerald-500" />
           </div>
-          <h1 className="text-3xl md:text-4xl font-bold text-emerald-800 mb-2">
-            Pemeriksaan Kesehatan Gratis
-          </h1>
           <p className="text-emerald-600 text-lg">
             Formulir Pendataan Peserta PKG
           </p>
+          <h1 className="text-3xl md:text-4xl font-bold text-emerald-800 mb-2">
+            Pemeriksaan Kesehatan Gratis
+          </h1>
           <p className="text-gray-600 mt-2 max-w-2xl mx-auto">
             Silakan lengkapi data diri Anda dengan benar untuk mendapatkan
             layanan pemeriksaan kesehatan gratis
