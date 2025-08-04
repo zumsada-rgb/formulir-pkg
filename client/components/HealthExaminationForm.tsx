@@ -256,13 +256,19 @@ export default function HealthExaminationForm() {
       const GOOGLE_SCRIPT_URL =
         "https://script.google.com/macros/s/AKfycby7HjBAb263-H0OVsgKtqcP8ZCwqRrgA4UxhFxTS4lJxy2BhbbZUvAzNhJvhjGPRMWT/exec";
 
+      // Tambahkan tanda kutip tunggal di depan nomor HP untuk menjaga angka 0
+      const dataToSend = {
+        ...formData,
+        nomorHp: `'${formData.nomorHp}` // Menambahkan ' di depan nomor HP
+      };
+
       const response = await fetch(GOOGLE_SCRIPT_URL, {
         method: "POST",
         mode: "no-cors", // Important untuk Google Apps Script
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(formData),
+        body: JSON.stringify(dataToSend),
       });
 
       // Karena mode 'no-cors', kita tidak bisa baca response
