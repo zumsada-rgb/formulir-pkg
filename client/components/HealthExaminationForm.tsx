@@ -254,7 +254,13 @@ export default function HealthExaminationForm() {
     try {
       // ✅ Google Apps Script Deployment URL - TERHUBUNG KE SPREADSHEET
       const GOOGLE_SCRIPT_URL =
-        "https://script.google.com/macros/s/AKfycbzb93hrh9zWvm18ik5Y7wVY0I9iAxrHUsTJak3jWfHGaeD-6rA0Vf-DqFwSkcoDZhAf/exec";
+        "https://script.google.com/macros/s/AKfycby7HjBAb263-H0OVsgKtqcP8ZCwqRrgA4UxhFxTS4lJxy2BhbbZUvAzNhJvhjGPRMWT/exec";
+
+      // Tambahkan tanda kutip tunggal di depan nomor HP untuk menjaga angka 0
+      const dataToSend = {
+        ...formData,
+        nomorHp: `'${formData.nomorHp}`, // Menambahkan ' di depan nomor HP
+      };
 
       const response = await fetch(GOOGLE_SCRIPT_URL, {
         method: "POST",
@@ -262,7 +268,7 @@ export default function HealthExaminationForm() {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(formData),
+        body: JSON.stringify(dataToSend),
       });
 
       // Karena mode 'no-cors', kita tidak bisa baca response
@@ -335,12 +341,12 @@ export default function HealthExaminationForm() {
             </div>
             <Heart className="w-8 h-8 text-emerald-500" />
           </div>
-          <h1 className="text-3xl md:text-4xl font-bold text-emerald-800 mb-2">
-            Pemeriksaan Kesehatan Gratis
-          </h1>
           <p className="text-emerald-600 text-lg">
             Formulir Pendataan Peserta PKG
           </p>
+          <h1 className="text-3xl md:text-4xl font-bold text-emerald-800 mb-2">
+            Pemeriksaan Kesehatan Gratis
+          </h1>
           <p className="text-gray-600 mt-2 max-w-2xl mx-auto">
             Silakan lengkapi data diri Anda dengan benar untuk mendapatkan
             layanan pemeriksaan kesehatan gratis
@@ -681,7 +687,7 @@ export default function HealthExaminationForm() {
               </div>
 
               {/* Submit Button */}
-              <div className="pt-6">
+              <div className="pt-6 flex justify-center">
                 <Button
                   type="submit"
                   disabled={isSubmitting}
@@ -704,13 +710,10 @@ export default function HealthExaminationForm() {
           </CardContent>
         </Card>
 
-        {/* Footer Info */}
+        {/* Footer Copyright */}
         <div className="mt-8 text-center">
-          <p className="text-sm text-gray-600">
-            * Semua field wajib diisi. Data Anda akan dijaga kerahasiaannya
-          </p>
-          <p className="text-xs text-gray-500 mt-2">
-            Untuk informasi lebih lanjut, hubungi panitia penyelenggara
+          <p className="text-sm text-gray-600 font-medium">
+            Copyright © 2025 SMK NU 2 KEDUNGPRING
           </p>
         </div>
       </div>
