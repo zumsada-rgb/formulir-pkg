@@ -254,7 +254,7 @@ export default function HealthExaminationForm() {
     try {
       // ✅ Google Apps Script Deployment URL - TERHUBUNG KE SPREADSHEET
       const GOOGLE_SCRIPT_URL =
-        "https://script.google.com/macros/s/AKfycbzb93hrh9zWvm18ik5Y7wVY0I9iAxrHUsTJak3jWfHGaeD-6rA0Vf-DqFwSkcoDZhAf/exec";
+        "https://script.google.com/macros/s/AKfycby7HjBAb263-H0OVsgKtqcP8ZCwqRrgA4UxhFxTS4lJxy2BhbbZUvAzNhJvhjGPRMWT/exec";
 
       const response = await fetch(GOOGLE_SCRIPT_URL, {
         method: "POST",
