@@ -73,11 +73,11 @@ function doPost(e) {
       data.nama || "",
       data.kelasRuang || "",
       data.jurusan || "",
-      data.nik || "",
-      data.nisn || "",
+      "'" + (data.nik || ""), // Prefix apostrophe untuk mempertahankan leading zero
+      "'" + (data.nisn || ""), // Prefix apostrophe untuk mempertahankan leading zero
       formatTTL(data.tempatLahir, data.tanggalLahir), // TTL GABUNGAN
       data.email || "",
-      data.nomorHp || "",
+      "'" + (data.nomorHp || ""), // Prefix apostrophe untuk mempertahankan leading zero
       data.alamat || "",
     ];
 
