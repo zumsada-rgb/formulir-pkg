@@ -687,7 +687,7 @@ export default function HealthExaminationForm() {
               </div>
 
               {/* Submit Button */}
-              <div className="pt-6">
+              <div className="pt-6 flex justify-center">
                 <Button
                   type="submit"
                   disabled={isSubmitting}
